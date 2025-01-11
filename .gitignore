@@ -1,6 +1,7 @@
 logs
 target
 .metals
+.bloop
 /.bsp
 /.idea
 /.idea_modules

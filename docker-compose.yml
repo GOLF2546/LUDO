@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  ludo-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    command: ["sh", "-c", "bin/ludo -Dplay.http.secret.key=null -Dplay.server.mode=dev"]
