@@ -1,20 +1,28 @@
 package models
 
-case class Pawn(initialX: Int, initialY: Int, color: Color) {
-  private var positionX: Int = initialX
-  private var positionY: Int = initialY
+case class Pawn(
+  PawnId: Int,
+  initialX: Int,
+  initialY: Int,
+  color: Color
+)
 
-  val getPosition: (Int, Int) = (positionX, positionY)
+object PawnFunctions {
+  val getPosition: Pawn => (Int, Int) = pawn => 
+    (pawn.initialX, pawn.initialY)
   
-  val move: Int => (Int, Int) = (steps: Int) => {
-    positionX += steps
-    (positionX, positionY)
+  val move: (Pawn, Int, List[Pawn]) => (Int, Int) = (pawn, steps, otherPawns) => {
+    val newX = pawn.initialX + steps
+    checkPosition(newX, pawn.initialY, otherPawns)
+    (newX, pawn.initialY)
   }
 
-  val moveTo: (Int, Int) => Unit = (x: Int, y: Int) => {
-    positionX = x
-    positionY = y
+  val checkPosition: (Int, Int, List[Pawn]) => Unit = (newX, newY, otherPawns) => {
+    otherPawns.find(pawn => getPosition(pawn) == (newX, newY)) foreach { pawn =>
+      println(s"(0, 0) Pawn ${pawn.PawnId} ${pawn.color}")
+    }
   }
 
-  override def toString: String = s"Pawn at ($positionX, $positionY) with color ${color.name}"
+  val isPawnAtStart: Pawn => Boolean = pawn => 
+    pawn.initialX == 0 && pawn.initialY == 0
 }
