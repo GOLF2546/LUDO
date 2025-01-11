@@ -1,4 +1,3 @@
-// Save as e:/Functional_Project/LUDO/app/models/Color.scala
 package models
 
 sealed trait Color {
@@ -18,7 +17,4 @@ object Color {
   case object Yellow extends Color {
     val name: String = "Yellow"
   }
-
-  val values: List[Color] = List(Blue, Red, Green, Yellow)
-  def fromName(name: String): Option[Color] = values.find(_.name.equalsIgnoreCase(name))
 }

@@ -1,4 +1,3 @@
-// Save as e:/Functional_Project/LUDO/app/models/Player.scala
 package models
 
 case class Player(id: Int, name: String, color: Color) {

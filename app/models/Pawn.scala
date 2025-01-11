@@ -1,18 +1,17 @@
-// Save as e:/Functional_Project/LUDO/app/models/Pawn.scala
 package models
 
 case class Pawn(initialX: Int, initialY: Int, color: Color) {
   private var positionX: Int = initialX
   private var positionY: Int = initialY
 
-  def getPosition: (Int, Int) = (positionX, positionY)
+  val getPosition: (Int, Int) = (positionX, positionY)
   
-  def move(steps: Int): (Int, Int) = {
+  val move: Int => (Int, Int) = (steps: Int) => {
     positionX += steps
-    getPosition
+    (positionX, positionY)
   }
 
-  def moveTo(x: Int, y: Int): Unit = {
+  val moveTo: (Int, Int) => Unit = (x: Int, y: Int) => {
     positionX = x
     positionY = y
   }
