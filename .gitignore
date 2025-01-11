@@ -11,5 +11,5 @@ target
 .metals/metals.log
 .metals/metals.lock.db
 .metals/metals.lock.db
-project/.bloop/ludo-build.json
-project/project/.bloop/ludo-build-build.json
+project/.bloop
+project/project/.bloop
