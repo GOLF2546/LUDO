@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Oswald:wght@200..700&display=swap');
+
+body.home-page {
+  background-image: url('../images/Ludo-background3.png');
+  background-repeat: no-repeat;
+  background-position: center calc(-100px);
+  background-size: cover;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(to right, #fd785d, #ff966b, #ffb37a);
+  color: white;
+  text-align: center;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.bottom-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  width: 80%;
+}
+
+.bottom-bar .play-button {
+  background-color: #22776e;
+  width: 100%;
+  height: 60px;
+  font-family: 'Kanit';
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 30px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bottom-bar .play-button:hover {
+  background-color: #45a049;
+}
+.bottom-bar .howToPlay-button {
+  background-color: #045472;
+  width: 100%;
+  height: 60px;
+  font-family: 'Kanit';
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 30px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bottom-bar .howToPlay-button:hover {
+  background-color: #52bcda;
+}
