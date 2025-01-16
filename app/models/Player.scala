@@ -4,7 +4,11 @@ case class Player(id: Int, color: Color, pawns: List[Pawn])
 
 object PlayerFunctions {
   import PawnFunctions._
-
+  
+  
+  // val getColor: Player => (Color) = Player => 
+  //   (Player.color)
+  
   val showPawns: Player => String = player => 
     player.pawns.mkString("\n")
 

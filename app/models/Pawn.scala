@@ -8,6 +8,17 @@ case class Pawn(
 )
 
 object PawnFunctions {
+
+  val setPosition: (Pawn, Color) => (Int, Int) = (pawn, color) => {
+    color match {
+      case Color.Blue   => (0, 0)  // Blue pawns start at (0, 0)
+      case Color.Red    => (13, 0)  // Red pawns start at (13, 0)
+      case Color.Green  => (26, 0)  // Green pawns start at (26, 0)
+      case Color.Yellow => (39, 0)  // Yellow pawns start at (39, 0)
+    }
+  }
+
+
   val getPosition: Pawn => (Int, Int) = pawn => 
     (pawn.initialX, pawn.initialY)
   
@@ -24,5 +35,6 @@ object PawnFunctions {
   }
 
   val isPawnAtStart: Pawn => Boolean = pawn => 
-    pawn.initialX == 0 && pawn.initialY == 0
+    //pawn.initialX == 0 && 
+    pawn.initialY == 0
 }
