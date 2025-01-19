@@ -30,12 +30,27 @@ object PlayerFunctions {
       .headOption
   }
 
+  // val movePawnToStartPosition: Player => Player = player => {
+  //   findStartingPawnWithLeastId(player) match {
+  //     case Some(pawnId) =>
+  //       val updatedPawns = player.pawns.map { pawn =>
+  //         if (pawn.PawnId == pawnId) {
+  //           pawn.copy(initialX = 1, initialY = 1)
+  //         } else pawn
+  //       }
+  //       println(s"Move $pawnId to start position")
+  //       player.copy(pawns = updatedPawns)
+  //     case None =>
+  //       println("None to move pawn to start position")
+  //       player
+  //   }
+  // }
   val movePawnToStartPosition: Player => Player = player => {
     findStartingPawnWithLeastId(player) match {
       case Some(pawnId) =>
         val updatedPawns = player.pawns.map { pawn =>
           if (pawn.PawnId == pawnId) {
-            pawn.copy(initialX = 1, initialY = 1)
+            pawn.copy(initialX = setPosition(player.color), initialY = 1,state = PawnState.Normal)
           } else pawn
         }
         println(s"Move $pawnId to start position")
@@ -46,6 +61,10 @@ object PlayerFunctions {
     }
   }
 
+  // val getPawnsThatCanMove: Player => List[Pawn] = player => 
+  //   player.pawns.filterNot(PawnFunctions.isPawnAtStart)
+  
+    
   val getPawnsThatCanMove: Player => List[Pawn] = player => 
-    player.pawns.filterNot(PawnFunctions.isPawnAtStart)
+    player.pawns.filter(PawnFunctions.isPawnCanMove)
 }

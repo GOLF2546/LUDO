@@ -16,7 +16,7 @@ object Board extends App {
   val createInitialPlayers: () => List[Player] = () => {
     val playerColors = List(Color.Red, Color.Blue, Color.Green, Color.Yellow)
     (1 to 4).toList.zip(playerColors).map {
-      case (id, color) => Player(id, color, (1 to 4).map(id => Pawn(id, 0, 0, color)).toList)
+      case (id, color) => Player(id, color, (1 to 4).map(id => Pawn(id, 0, 0, color,PawnState.Start)).toList)
     }
   }
 

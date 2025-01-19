@@ -4,17 +4,27 @@ case class Pawn(
   PawnId: Int,
   initialX: Int,
   initialY: Int,
-  color: Color
+  color: Color,
+  state: PawnState
 )
 
 object PawnFunctions {
 
-  val setPosition: (Pawn, Color) => (Int, Int) = (pawn, color) => {
+  // val setPosition: (Pawn, Color) => (Int, Int) = (pawn, color) => {
+  //   color match {
+  //     case Color.Blue   => (0, 0)  // Blue pawns start at (0, 0)
+  //     case Color.Red    => (13, 0)  // Red pawns start at (13, 0)
+  //     case Color.Green  => (26, 0)  // Green pawns start at (26, 0)
+  //     case Color.Yellow => (39, 0)  // Yellow pawns start at (39, 0)
+  //   }
+  // }
+
+  val setPosition: (Color) => (Int) = (color) => {
     color match {
-      case Color.Blue   => (0, 0)  // Blue pawns start at (0, 0)
-      case Color.Red    => (13, 0)  // Red pawns start at (13, 0)
-      case Color.Green  => (26, 0)  // Green pawns start at (26, 0)
-      case Color.Yellow => (39, 0)  // Yellow pawns start at (39, 0)
+      case Color.Blue   => (0)  // Blue pawns start at (0, 0)
+      case Color.Red    => (13)  // Red pawns start at (13, 0)
+      case Color.Green  => (26)  // Green pawns start at (26, 0)
+      case Color.Yellow => (39)  // Yellow pawns start at (39, 0)
     }
   }
 
@@ -37,4 +47,7 @@ object PawnFunctions {
   val isPawnAtStart: Pawn => Boolean = pawn => 
     //pawn.initialX == 0 && 
     pawn.initialY == 0
+
+  val isPawnCanMove: Pawn => Boolean = pawn =>
+    pawn.state == PawnState.Normal || pawn.state == PawnState.Finish
 }
