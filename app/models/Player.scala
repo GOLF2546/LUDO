@@ -15,8 +15,8 @@ object PlayerFunctions {
   val movePawn: (Player, Int, Int, List[Pawn]) => Player = (player, pawnId, steps, otherPawns) => {
     val updatedPawns = player.pawns.map { pawn =>
       if (pawn.PawnId == pawnId) {
-        val (newX, newY) = PawnFunctions.move(pawn, steps, otherPawns)
-        pawn.copy(initialX = newX, initialY = newY)
+        val (newX, newY, newState) = PawnFunctions.move(pawn, steps, otherPawns)
+        pawn.copy(initialX = newX, initialY = newY, state = newState)
       } else pawn
     }
     player.copy(pawns = updatedPawns)

@@ -19,8 +19,9 @@ object GameStatePrinter {
   // }
   val createPawnStateStr: Pawn => String = pawn => {
     val (x, y) = PawnFunctions.getPosition(pawn)
-    val atStart = PawnFunctions.isPawnAtStart(pawn)
-    val status = if (atStart) "at start" else "in play"
+    val canMove = PawnFunctions.isPawnCanMove(pawn)
+    // val atStart = PawnFunctions.isPawnAtStart(pawn)
+    val status = if (canMove) "can't move" else "in play"
     s"Pawn ${pawn.PawnId}: Position($x, $y) - $status"
   }
 
