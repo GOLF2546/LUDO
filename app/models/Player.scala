@@ -4,23 +4,23 @@ case class Player(id: Int, color: Color, pawns: List[Pawn])
 
 object PlayerFunctions {
   import PawnFunctions._
-  
-  
-  // val getColor: Player => (Color) = Player => 
-  //   (Player.color)
-  
-  val showPawns: Player => String = player => 
-    player.pawns.mkString("\n")
 
-  val movePawn: (Player, Int, Int, List[Pawn]) => Player = (player, pawnId, steps, otherPawns) => {
-    val updatedPawns = player.pawns.map { pawn =>
-      if (pawn.PawnId == pawnId) {
-        val (newX, newY, newState) = PawnFunctions.move(pawn, steps, otherPawns)
-        pawn.copy(initialX = newX, initialY = newY, state = newState)
-      } else pawn
+  // val getColor: Player => (Color) = Player =>
+  //   (Player.color)
+
+  val showPawns: Player => String = player => player.pawns.mkString("\n")
+
+  val movePawn: (Player, Int, Int, List[Pawn]) => Player =
+    (player, pawnId, steps, otherPawns) => {
+      val updatedPawns = player.pawns.map { pawn =>
+        if (pawn.PawnId == pawnId) {
+          val (newX, newY, newState) =
+            PawnFunctions.move(pawn, steps, otherPawns)
+          pawn.copy(initialX = newX, initialY = newY, state = newState)
+        } else pawn
+      }
+      player.copy(pawns = updatedPawns)
     }
-    player.copy(pawns = updatedPawns)
-  }
 
   val findStartingPawnWithLeastId: Player => Option[Int] = player => {
     player.pawns
@@ -50,7 +50,11 @@ object PlayerFunctions {
       case Some(pawnId) =>
         val updatedPawns = player.pawns.map { pawn =>
           if (pawn.PawnId == pawnId) {
-            pawn.copy(initialX = setPosition(player.color), initialY = 1,state = PawnState.Normal)
+            pawn.copy(
+              initialX = setPosition(player.color),
+              initialY = 1,
+              state = PawnState.Normal
+            )
           } else pawn
         }
         println(s"Move $pawnId to start position")
@@ -61,10 +65,9 @@ object PlayerFunctions {
     }
   }
 
-  // val getPawnsThatCanMove: Player => List[Pawn] = player => 
+  // val getPawnsThatCanMove: Player => List[Pawn] = player =>
   //   player.pawns.filterNot(PawnFunctions.isPawnAtStart)
-  
-    
-  val getPawnsThatCanMove: Player => List[Pawn] = player => 
+
+  val getPawnsThatCanMove: Player => List[Pawn] = player =>
     player.pawns.filter(PawnFunctions.isPawnCanMove)
 }

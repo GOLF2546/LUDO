@@ -1,34 +1,35 @@
 package models
 
 case class Pawn(
-  PawnId: Int,
-  initialX: Int,
-  initialY: Int,
-  color: Color,
-  state: PawnState
+    PawnId: Int,
+    initialX: Int,
+    initialY: Int,
+    color: Color,
+    state: PawnState
 )
 
 object PawnFunctions {
 
-
   val setPosition: (Color) => (Int) = (color) => {
     color match {
-      case Color.Blue   => (0)  // Blue pawns start at (0, 0)
-      case Color.Red    => (13)  // Red pawns start at (13, 0)
-      case Color.Green  => (26)  // Green pawns start at (26, 0)
-      case Color.Yellow => (39)  // Yellow pawns start at (39, 0)
+      case Color.Blue   => (0) // Blue pawns start at (0, 0)
+      case Color.Red    => (13) // Red pawns start at (13, 0)
+      case Color.Green  => (26) // Green pawns start at (26, 0)
+      case Color.Yellow => (39) // Yellow pawns start at (39, 0)
     }
   }
 
-
-  val getPosition: Pawn => (Int, PawnState) = pawn => 
+  val getPosition: Pawn => (Int, PawnState) = pawn =>
     (pawn.initialX, pawn.state)
-  
-  val move: (Pawn, Int, List[Pawn]) => (Int, Int, PawnState) = (pawn, steps, otherPawns) => {
-    val newY = pawn.initialY + steps
-    println(s"new Y is ${newY} initialy is ${pawn.initialY} and step is ${steps}")
-    // Compute newX and state based on the current state and newY
-    val (newX, newState) = (pawn.state, newY) match {
+
+  val move: (Pawn, Int, List[Pawn]) => (Int, Int, PawnState) =
+    (pawn, steps, otherPawns) => {
+      val newY = pawn.initialY + steps
+      println(
+        s"new Y is ${newY} initialy is ${pawn.initialY} and step is ${steps}"
+      )
+      // Compute newX and state based on the current state and newY
+      val (newX, newState) = (pawn.state, newY) match {
         case (PawnState.Normal, y) if y > 10 =>
           val nextX = newY - 10
           println("Pawn is in Normal state, moving to the finish line.")
@@ -50,11 +51,18 @@ object PawnFunctions {
       // Return the new position and state
       (newX, newY, newState)
     }
-    val checkPosition: (Int, PawnState, List[Pawn]) => List[Pawn] = (newX, state, otherPawns) => {
+  val checkPosition: (Int, PawnState, List[Pawn]) => List[Pawn] =
+    (newX, state, otherPawns) => {
       otherPawns.map { pawn =>
-        if (pawn.state == PawnState.Normal && getPosition(pawn) == (newX, state)) {
-          println(s"(0, 0) Pawn ${pawn.PawnId} ${pawn.color} is being reset to the Start state.")
-          pawn.copy(state = PawnState.Start) // Create a new Pawn with the updated state
+        if (
+          pawn.state == PawnState.Normal && getPosition(pawn) == (newX, state)
+        ) {
+          println(
+            s"(0, 0) Pawn ${pawn.PawnId} ${pawn.color} is being reset to the Start state."
+          )
+          pawn.copy(state =
+            PawnState.Start
+          ) // Create a new Pawn with the updated state
         } else {
           pawn // Keep the original Pawn unchanged
         }
@@ -66,8 +74,8 @@ object PawnFunctions {
   //   }
   // }
 
-  val isPawnAtStart: Pawn => Boolean = pawn => 
-    //pawn.initialX == 0 && 
+  val isPawnAtStart: Pawn => Boolean = pawn =>
+    // pawn.initialX == 0 &&
     pawn.initialY == 0
 
   val isPawnCanMove: Pawn => Boolean = pawn =>

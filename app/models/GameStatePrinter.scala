@@ -3,7 +3,7 @@ import PlayerFunctions._
 import PawnFunctions._
 
 object GameStatePrinter {
-  
+
   // val createPawnStateStr: (Pawn, Color) => String = (pawn, color) => {
   //   val (x, y) = setPosition(pawn, color) // Use setPosition with Pawn and Color
   //   val atStart = PawnFunctions.isPawnAtStart(pawn) // Check if the pawn is at its starting position
