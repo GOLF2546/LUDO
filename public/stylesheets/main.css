@@ -1,66 +1,79 @@
-@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Oswald:wght@200..700&display=swap');
-
-body.home-page {
-  background-image: url('../images/Ludo-background3.png');
-  background-repeat: no-repeat;
-  background-position: center calc(-100px);
-  background-size: cover;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
-.bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  background: linear-gradient(to right, #fd785d, #ff966b, #ffb37a);
-  color: white;
-  text-align: center;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+body.home-page, body.how-to-page {
+  background-color: black;
+  height: 100vh;
+  width: 100vw;
+}
+
+.container {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 20px;
 }
 
-.bottom-buttons-container {
+.background-image {
+  position: absolute;
+  width: 100vw;
+  height: 56.25vw;
+  max-height: 100vh;
+  max-width: 177.78vh;
+  margin: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.background-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 30%;
+  right: 10%;
   display: flex;
-  justify-content: space-between;
-  gap: 50px;
-  width: 80%;
+  flex-direction: column;
+  gap: 100px;
+  align-items: center;
 }
 
-.bottom-bar .play-button {
-  background-color: #22776e;
-  width: 100%;
-  height: 60px;
-  font-family: 'Kanit';
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  font-size: 30px;
-  border-radius: 20px;
+.start-btn {
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.bottom-bar .play-button:hover {
-  background-color: #45a049;
-}
-.bottom-bar .howToPlay-button {
-  background-color: #045472;
+  max-width: 270px;
   width: 100%;
-  height: 60px;
-  font-family: 'Kanit';
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  font-size: 30px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  height: auto;
 }
 
-.bottom-bar .howToPlay-button:hover {
-  background-color: #52bcda;
+.how-to-btn {
+  cursor: pointer;
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+}
+
+.button-container2 {
+  position: absolute;
+  right: 10%;
+  bottom: 10px;  /* Using the more specific value */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-btn {
+  cursor: pointer;
+  max-width: 400px;
+  width: 100%;
+  height: auto;
 }

@@ -1,0 +1,11 @@
+@main("Ludo Game", "game-page") {
+  <div>
+      <img src="{{ asset('images/components/start.png') }}" alt="Start Button" class="start-btn" onclick="startGame()">
+  </div>
+  <script>
+    function startGame() {
+      window.location.href = "{{ route('game.start') }}";
+    }
+    </script>
+  }
+  
