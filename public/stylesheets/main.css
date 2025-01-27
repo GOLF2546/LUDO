@@ -5,7 +5,7 @@ html, body {
   overflow: hidden;
 }
 
-body.home-page, body.how-to-page {
+body.home-page, body.how-to-page, body.game-page {
   background-color: black;
   height: 100vh;
   width: 100vw;
@@ -76,4 +76,20 @@ body.home-page, body.how-to-page {
   max-width: 400px;
   width: 100%;
   height: auto;
+}
+
+.custom-container {
+  position: absolute;
+  background-color: rgb(120, 60, 175);
+  width: 100vw;
+  height: 56.25vw;
+  max-height: 100vh;
+  max-width: 177.78vh;
+  margin: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;  /* Add this */
+  justify-content: center;  /* Add this */
+  align-items: center;  /* Add this */
 }

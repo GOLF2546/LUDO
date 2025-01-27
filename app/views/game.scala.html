@@ -1,11 +1,46 @@
 @main("Ludo Game", "game-page") {
-  <div>
-      <img src="{{ asset('images/components/start.png') }}" alt="Start Button" class="start-btn" onclick="startGame()">
+  <div class="custom-container">
+    <div class="ludo-board">
+      <div class="game-grid">
+          <div class="home-base home-base-green">
+              <div class="home-square"></div>
+          </div>
+          
+          <div class="path-vertical">
+            @components.pathYellow(18)
+          </div>
+          
+          <div class="home-base home-base-yellow">
+            <div class="home-square"></div>
+          </div>
+          
+          <div class="path-horizontal">
+            @components.pathGreen(18)
+          </div>
+          
+          <div class="center-star">
+            <div class="top-left"></div>
+            <div class="top-right"></div>
+            <div class="bottom-left"></div>
+            <div class="bottom-right"></div>
+          </div>        
+
+          <div class="path-horizontal">
+            @components.pathBlue(18)
+          </div>
+
+          <div class="home-base home-base-red">
+              <div class="home-square"></div>
+          </div>
+
+          <div class="path-vertical">
+            @components.pathRed(18)
+          </div>
+
+          <div class="home-base home-base-blue">
+              <div class="home-square"></div>
+          </div>
+      </div>
+    </div>
   </div>
-  <script>
-    function startGame() {
-      window.location.href = "{{ route('game.start') }}";
-    }
-    </script>
-  }
-  
+}

@@ -1,0 +1,132 @@
+/* Game board container */
+.ludo-board {
+    position: relative;
+    width: 90vh;
+    height: 90vh;
+    background-color: #8b008b;
+    border: 2px solid white;
+    padding: 20px;
+  }
+
+.window-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.control-button {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+/* Game board grid */
+.game-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr 3fr;
+    grid-template-rows: 3fr 2fr 3fr;
+    gap: 2px;
+    height: 100%;
+}
+
+/* Home bases */
+.home-base {
+    width: 100%;
+    height: 100%;
+    /* padding: 10%; */
+}
+
+.home-base-green {
+    background-color: #00ff00;
+}
+
+.home-base-yellow {
+    background-color: #ffff00;
+}
+
+.home-base-red {
+    background-color: red;
+}
+
+.home-base-blue {
+    background-color: #0000ff;
+}
+
+/* Home squares (white areas inside colored bases) */
+.home-square {
+    background-color: white;
+    width: 80%;
+    height: 80%;
+    margin: 10%;
+}
+
+/* Path squares */
+.path-vertical {
+    display: grid;
+    background-color: white;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: repeat(6, 1fr);
+    gap: 1px;
+}
+
+.path-horizontal {
+    display: grid;
+    background-color: white;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+}
+
+.path-square {
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 100%;
+}
+
+.center-star {
+    position: relative;
+    width: 100%; 
+    height: 100%;
+    display: grid;
+}
+
+.center-star div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.top-left {
+    background: #ffff00;
+    clip-path: polygon(50% 50%, 0% 0%, 100% 0%);
+}
+
+.top-right {
+    background: blue;
+    clip-path: polygon(50% 50%, 100% 0%, 100% 100%);
+}
+
+.bottom-left {
+    background: #00ff00;
+    clip-path: polygon(50% 50%, 0% 100%, 0% 0%);
+}
+
+.bottom-right {
+    background: red;
+    clip-path: polygon(50% 50%, 100% 100%, 0% 100%);
+}
+
+.path-green {
+    background-color: #00ff00;
+}
+
+.path-yellow {
+    background-color: #ffff00;
+}
+
+.path-red {
+    background-color: red;
+}
+
+.path-blue {
+    background-color: #0000ff;
+}

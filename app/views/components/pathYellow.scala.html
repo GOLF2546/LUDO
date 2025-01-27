@@ -1,0 +1,9 @@
+@(count: Int)
+    
+    @for(i <- 1 to count) {
+        @if(i == 5 || i == 6 || i == 8 || i == 11 || i == 14 || i ==17){
+            <div class="path-square path-yellow"></div>
+        }else{
+            <div class="path-square"></div>
+        }
+    }
