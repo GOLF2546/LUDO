@@ -1,0 +1,18 @@
+@(count: Int, color: String)
+
+@defining(color.toLowerCase) { pathColor =>
+  @for(i <- 1 to count) {
+    <div class="path-square@{getPathColorClass(pathColor, i)}"></div>
+  }
+}
+
+@* Helper function to determine if a square should be colored based on position and color *@
+@getPathColorClass(color: String, position: Int) = @{
+  color match {
+    case "blue" if position == 17 || (position >= 7 && position < 12) => " path-blue"
+    case "green" if position == 2 || (position >= 8 && position < 13) => " path-green"
+    case "red" if List(2, 5, 8, 11, 13, 14).contains(position) => " path-red"
+    case "yellow" if List(5, 6, 8, 11, 14, 17).contains(position) => " path-yellow"
+    case _ => ""
+  }
+}
