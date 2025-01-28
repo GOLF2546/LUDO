@@ -1,0 +1,37 @@
+@(count: Int, color: String)
+
+@defining(color.toLowerCase) { pathColor =>
+  @for(i <- 1 to count) {
+    <div id="@{getCustomId(pathColor, i)}" class="path-square@{getPathColorClass(pathColor, i)}"></div>
+  }
+}
+
+@* Helper function to determine if a square should be colored based on position and color *@
+@getPathColorClass(color: String, position: Int) = @{
+  color match {
+    case "blue" if position == 17 || (position >= 7 && position < 12) => " path-blue"
+    case "green" if position == 2 || (position >= 8 && position < 13) => " path-green"
+    case "red" if List(2, 5, 8, 11, 13, 14).contains(position) => " path-red"
+    case "yellow" if List(5, 6, 8, 11, 14, 17).contains(position) => " path-yellow"
+    case _ => ""
+  }
+}
+
+@* Helper function to get custom ID based on color and position *@
+@getCustomId(color: String, position: Int) = @{
+  color match {
+    case "green" => 
+      val greenIds = List("52", "1", "2", "3", "4", "5", "51", "G1", "G2", "G3", "G4", "G5", "50", "49", "48", "47", "46", "45")
+      greenIds(position - 1)
+    case "yellow" => 
+      val yellowIds = List("11", "12", "13", "10", "Y1", "14", "9", "Y2", "15", "8", "Y3", "16", "7", "Y4", "17", "6", "Y5", "18")
+      yellowIds(position - 1)
+      case "blue" => 
+      val blueIds = List("19", "20", "21", "22", "23", "24", "B5", "B4", "B3", "B2", "B1", "25", "31", "30", "29", "28", "27", "26")
+      blueIds(position - 1)
+      case "red" => 
+      val redIds = List("44", "R5", "32", "43", "R4", "33", "42", "R3", "34", "41", "R2", "35", "40", "R1", "36", "39", "38", "37")
+      redIds(position - 1)
+    case _ => position.toString
+  }
+}
