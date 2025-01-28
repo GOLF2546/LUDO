@@ -1,0 +1,95 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body.home-page, body.how-to-page, body.game-page {
+  background-color: black;
+  height: 100vh;
+  width: 100vw;
+}
+
+.container {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.background-image {
+  position: absolute;
+  width: 100vw;
+  height: 56.25vw;
+  max-height: 100vh;
+  max-width: 177.78vh;
+  margin: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.background-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 30%;
+  right: 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+  align-items: center;
+}
+
+.start-btn {
+  cursor: pointer;
+  max-width: 270px;
+  width: 100%;
+  height: auto;
+}
+
+.how-to-btn {
+  cursor: pointer;
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+}
+
+.button-container2 {
+  position: absolute;
+  right: 10%;
+  bottom: 10px;  /* Using the more specific value */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-btn {
+  cursor: pointer;
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+}
+
+.custom-container {
+  position: absolute;
+  background-color: rgb(120, 60, 175);
+  width: 100vw;
+  height: 56.25vw;
+  max-height: 100vh;
+  max-width: 177.78vh;
+  margin: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;  /* Add this */
+  justify-content: center;  /* Add this */
+  align-items: center;  /* Add this */
+}

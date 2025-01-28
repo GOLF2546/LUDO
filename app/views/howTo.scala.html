@@ -1,0 +1,17 @@
+@main("Ludo Game", "how-to-page") {
+<div class="container">
+    <div class="background-image">
+        <img src="@routes.Assets.versioned("images/page/howTo.png")" alt="Ludo Logo" class="logo">
+    </div>
+    <div class="button-container2">
+        <img src="@routes.Assets.versioned("images/components/button/homebutton.png")" alt="Home Button" class="home-btn"
+            onclick="home()">
+    </div>
+</div>
+
+<script>
+    function home() {
+        window.location.href = '@routes.HomeController.index()';
+    }
+</script>
+}
