@@ -1,46 +1,65 @@
 @main("Ludo Game", "game-page") {
-  <div class="custom-container">
-    <div class="ludo-board">
-      <div class="game-grid">
-          <div class="home-base home-base-green">
-              <div class="home-square"></div>
-          </div>
-          
-          <div class="path-vertical">
-            @components.pathYellow(18)
-          </div>
-          
-          <div class="home-base home-base-yellow">
-            <div class="home-square"></div>
-          </div>
-          
-          <div class="path-horizontal">
-            @components.pathGreen(18)
-          </div>
-          
-          <div class="center-star">
-            <div class="top-left"></div>
-            <div class="top-right"></div>
-            <div class="bottom-left"></div>
-            <div class="bottom-right"></div>
-          </div>        
-
-          <div class="path-horizontal">
-            @components.pathBlue(18)
-          </div>
-
-          <div class="home-base home-base-red">
-              <div class="home-square"></div>
-          </div>
-
-          <div class="path-vertical">
-            @components.pathRed(18)
-          </div>
-
-          <div class="home-base home-base-blue">
-              <div class="home-square"></div>
-          </div>
+<div class="custom-container">
+  <div class="ludo-board">
+    <div class="game-grid">
+      <div class="home-base home-base-green">
+        <div class="home-square">
+          @components.pawnAtHome(4, "Green")
+        </div>
       </div>
+
+      <div class="path-vertical">
+        @components.path(18, "Yellow")
+      </div>
+
+      <div class="home-base home-base-yellow">
+        <div class="home-square">
+          @components.pawnAtHome(4, "Yellow")
+        </div>
+      </div>
+
+      <div class="path-horizontal">
+        @components.path(18, "Green")
+      </div>
+
+      <div class="center-star">
+        <div class="top-left"></div>
+        <div class="top-right"></div>
+        <div class="bottom-left"></div>
+        <div class="bottom-right"></div>
+      </div>
+
+      <div class="path-horizontal">
+        @components.path(18, "Blue")
+      </div>
+
+      <div class="home-base home-base-red">
+        <div class="home-square">
+          @components.pawnAtHome(4, "Red")
+        </div>
+      </div>
+
+      <div class="path-vertical">
+        @components.path(18, "Red")
+      </div>
+
+      <div class="home-base home-base-blue">
+        <div class="home-square">
+          @components.pawnAtHome(4, "Blue")
+        </div>
+      </div>
+
     </div>
   </div>
+  <div class="button-container3">
+    <img src="@routes.Assets.versioned("images/components/button/homegamepage.png")" alt="home page" class="home-btn"
+      onclick="homePage()">
+  </div>
+</div>
+
+<script>
+  function homePage() {
+    window.location.href = '@routes.HomeController.index()';
+  }
+</script>
 }
