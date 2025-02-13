@@ -30,8 +30,8 @@ object PawnFunctions {
       )
       // Compute newX and state based on the current state and newY
       val (newX, newState) = (pawn.state, newY) match {
-        case (PawnState.Normal, y) if y > 10 =>
-          val nextX = newY - 10
+        case (PawnState.Normal, y) if y > 52 =>
+          val nextX = newY - 52
           println("Pawn is in Normal state, moving to the finish line.")
           (nextX, PawnState.Finish)
 

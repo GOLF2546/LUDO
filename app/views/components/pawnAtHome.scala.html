@@ -3,8 +3,12 @@
 @defining(color.toLowerCase) { normalizedColor =>
   @for(i <- 1 to count) {
     <div class="pawn-home">
-      <img src="@routes.Assets.versioned(s"images/components/pawn/${normalizedColor.charAt(0)}.png")" 
-           alt="@normalizedColor pawn">
+      <img src="@routes.Assets.versioned(s"images/components/pawn/${normalizedColor.charAt(0)}.png")"
+           alt="@normalizedColor pawn"
+           class="pawn"
+           onclick="movePawn(this)"
+           data-color="@normalizedColor"
+           data-pawn="@i" />
     </div>
   }
 }
