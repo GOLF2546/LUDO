@@ -1,26 +1,28 @@
 @main("Ludo Game", "game-page") {
 <div class="custom-container">
   <div class="ludo-board">
+    <p>
+      Dice Roll:
+      <span
+        >@flash.get("diceResult").getOrElse("Click 'Roll Dice' to start")</span
+      >
+    </p>
+
+    <form action="@routes.DiceController.rollDice()" method="GET">
+      <button type="submit">🎲 Roll Dice</button>
+    </form>
     <div class="game-grid">
       <div class="home-base home-base-green">
-        <div class="home-square">
-          @components.pawnAtHome(4, "Green")
-        </div>
+        <div class="home-square">@components.pawnAtHome(4, "Green")</div>
       </div>
 
-      <div class="path-vertical">
-        @components.path(18, "Yellow")
-      </div>
+      <div class="path-vertical">@components.path(18, "Yellow")</div>
 
       <div class="home-base home-base-yellow">
-        <div class="home-square">
-          @components.pawnAtHome(4, "Yellow")
-        </div>
+        <div class="home-square">@components.pawnAtHome(4, "Yellow")</div>
       </div>
 
-      <div class="path-horizontal">
-        @components.path(18, "Green")
-      </div>
+      <div class="path-horizontal">@components.path(18, "Green")</div>
 
       <div class="center-star">
         <div id="Y6" class="top-left"></div>
@@ -29,37 +31,29 @@
         <div id="R6" class="bottom-right"></div>
       </div>
 
-      <div class="path-horizontal">
-        @components.path(18, "Blue")
-      </div>
+      <div class="path-horizontal">@components.path(18, "Blue")</div>
 
       <div class="home-base home-base-red">
-        <div class="home-square">
-          @components.pawnAtHome(4, "Red")
-        </div>
+        <div class="home-square">@components.pawnAtHome(4, "Red")</div>
       </div>
 
-      <div class="path-vertical">
-        @components.path(18, "Red")
-      </div>
+      <div class="path-vertical">@components.path(18, "Red")</div>
 
       <div class="home-base home-base-blue">
-        <div class="home-square">
-          @components.pawnAtHome(4, "Blue")
-        </div>
+        <div class="home-square">@components.pawnAtHome(4, "Blue")</div>
       </div>
-
     </div>
   </div>
   <div class="button-container3">
-    <img src="@routes.Assets.versioned("images/components/button/homegamepage.png")" alt="home page" class="home-btn"
-      onclick="homePage()">
+    <img
+    src="@routes.Assets.versioned("images/components/button/homegamepage.png")"
+    alt="home page" class="home-btn" onclick="homePage()">
   </div>
 </div>
 
 <script>
   function homePage() {
-    window.location.href = '@routes.HomeController.index()';
+    window.location.href = "@routes.HomeController.index()";
   }
 </script>
 }
