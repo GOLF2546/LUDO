@@ -1,16 +1,15 @@
 @main("Ludo Game", "game-page") {
 <div class="custom-container">
   <div class="ludo-board">
-    <p>
-      Dice Roll:
-      <span
-        >@flash.get("diceResult").getOrElse("Click 'Roll Dice' to start")</span
-      >
-    </p>
+    <div id="dice-result" style="font-size: 20px; margin: 20px 0">
+      Click the button to roll the dice!
+    </div>
+    <button onclick="rollDice()">🎲 Roll Dice</button>
+    <div id="game-players" style="font-size: 20px; margin: 20px 0">
+      Click the button to start the game!
+    </div>
 
-    <form action="@routes.DiceController.rollDice()" method="GET">
-      <button type="submit">🎲 Roll Dice</button>
-    </form>
+    <button onclick="startGame()">Start Game</button>
     <div class="game-grid">
       <div class="home-base home-base-green">
         <div class="home-square">@components.pawnAtHome(4, "Green")</div>
@@ -54,6 +53,44 @@
 <script>
   function homePage() {
     window.location.href = "@routes.HomeController.index()";
+  }
+  async function rollDice() {
+    try {
+      const response = await fetch("@routes.DiceController.rollDice.url", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      const result = await response.json();
+      document.getElementById("dice-result").innerText = "Dice Roll: " + result;
+    } catch (error) {
+      console.error("Error rolling dice:", error);
+      document.getElementById("dice-result").innerText =
+        "Failed to roll the dice.";
+    }
+  }
+  async function startGame() {
+    try {
+      const response = await fetch("@routes.GameController.startGame.url", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      const players = await response.json();
+      let playerDetails = players
+        .map(
+          (player) =>
+            `Player ${player.id} (${player.color}): ${player.pawns.length} pawns`
+        )
+        .join("<br>");
+      document.getElementById("game-players").innerHTML = playerDetails;
+    } catch (error) {
+      console.error("Error starting game:", error);
+      document.getElementById("game-players").innerText =
+        "Failed to start the game.";
+    }
   }
 </script>
 }

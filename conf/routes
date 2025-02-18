@@ -12,4 +12,4 @@ GET     /howTo                      controllers.HomeController.howtoplay()
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 GET    /rollDice    controllers.DiceController.rollDice
-GET    /startGame   controllers.GameController.startGame
+GET   /startGame   controllers.GameController.startGame

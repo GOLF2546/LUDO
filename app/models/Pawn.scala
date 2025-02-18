@@ -1,5 +1,7 @@
 package models
 
+// import play.api.libs.json._
+
 case class Pawn(
     PawnId: Int,
     initialX: Int,
@@ -7,6 +9,10 @@ case class Pawn(
     color: Color,
     state: PawnState
 )
+
+// object Pawn {
+//   implicit val pawnFormat: Format[Pawn] = Json.format[Pawn]
+// }
 
 object PawnFunctions {
 
@@ -30,6 +36,9 @@ object PawnFunctions {
       )
       // Compute newX and state based on the current state and newY
       val (newX, newState) = (pawn.state, newY) match {
+        case (PawnState.Start, y) if y == 6 =>
+          println("Pawn is in Start state, moving to normal statr")
+          (setPosition(pawn.color), PawnState.Normal)
         case (PawnState.Normal, y) if y > 10 =>
           val nextX = newY - 10
           println("Pawn is in Normal state, moving to the finish line.")
@@ -76,8 +85,9 @@ object PawnFunctions {
 
   val isPawnAtStart: Pawn => Boolean = pawn =>
     // pawn.initialX == 0 &&
-    pawn.initialY == 0
+    pawn.state == PawnState.Start
 
   val isPawnCanMove: Pawn => Boolean = pawn =>
     pawn.state == PawnState.Normal || pawn.state == PawnState.Finish
+
 }
