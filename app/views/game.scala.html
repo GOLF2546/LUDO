@@ -54,43 +54,87 @@
   function homePage() {
     window.location.href = "@routes.HomeController.index()";
   }
-  async function rollDice() {
-    try {
-      const response = await fetch("@routes.DiceController.rollDice.url", {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      });
-      const result = await response.json();
-      document.getElementById("dice-result").innerText = "Dice Roll: " + result;
-    } catch (error) {
-      console.error("Error rolling dice:", error);
-      document.getElementById("dice-result").innerText =
-        "Failed to roll the dice.";
-    }
+  let diceValue = null;
+
+// Function to roll the dice and display the result
+async function rollDice() {
+  try {
+    const response = await fetch("@routes.DiceController.rollDice.url", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+    const result = await response.json();
+    diceValue = result; // Store the dice value
+    document.getElementById("dice-result").innerText = "Dice Roll: " + result;
+  } catch (error) {
+    console.error("Error rolling dice:", error);
+    document.getElementById("dice-result").innerText =
+      "Failed to roll the dice.";
   }
-  async function startGame() {
-    try {
-      const response = await fetch("@routes.GameController.startGame.url", {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      });
-      const players = await response.json();
-      let playerDetails = players
-        .map(
-          (player) =>
-            `Player ${player.id} (${player.color}): ${player.pawns.length} pawns`
-        )
-        .join("<br>");
-      document.getElementById("game-players").innerHTML = playerDetails;
-    } catch (error) {
-      console.error("Error starting game:", error);
-      document.getElementById("game-players").innerText =
-        "Failed to start the game.";
-    }
+}
+
+// Function to start the game and load player details
+async function startGame() {
+  try {
+    const response = await fetch("@routes.GameController.startGame.url", {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+    const players = await response.json();
+
+    let playerDetails = players
+      .map((player) => {
+        let pawnImages = player.pawns
+          .map((p) => {
+            // Construct the image path dynamically
+            const imagePath = `/assets/images/components/pawn/${p.color.charAt(0).toLowerCase()}.png`;
+
+            // Return the image HTML tag with onclick handler to select the pawn
+            return `<img src="${imagePath}" alt="${p.color} pawn" onclick="selectPawn(${player.id}, '${p.color}', ${p.PawnId})">`;
+          })
+          .join(" ");
+
+        return `Player ${player.id} (${player.color}): ${pawnImages}`;
+      })
+      .join("<br>");
+
+    document.getElementById("game-players").innerHTML = playerDetails;
+  } catch (error) {
+    console.error("Error starting game:", error);
+    document.getElementById("game-players").innerText =
+      "Failed to start the game.";
   }
+}
+
+// Function to handle pawn click and send the pawn data with the dice roll value
+async function selectPawn(playerId, color, pawnId) {
+  if (diceValue === null) {
+    alert("You must roll the dice first!");
+    return;
+  }
+
+  try {
+    const response = await fetch("@routes.GameController.handlePawnClick.url", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        pawnId: pawnId,
+        color: color,
+        diceValue: diceValue,
+      }),
+    });
+
+    const updatedPlayer = await response.json();
+    console.log("Player updated:", updatedPlayer);
+
+    // Update the UI or give feedback to the user based on the response
+  } catch (error) {
+    console.error("Error handling pawn click:", error);
+  }
+}
 </script>
 }

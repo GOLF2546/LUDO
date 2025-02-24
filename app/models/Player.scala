@@ -1,12 +1,12 @@
 package models
 
-// import play.api.libs.json._
+import play.api.libs.json._
 
 case class Player(id: Int, color: Color, pawns: List[Pawn])
 
-// object Player {
-//   implicit val playerFormat: Format[Player] = Json.format[Player]
-// }
+object Player {
+  implicit val playerFormat: Format[Player] = Json.format[Player]
+}
 
 object PlayerFunctions {
   import PawnFunctions._
@@ -35,7 +35,12 @@ object PlayerFunctions {
       .sorted
       .headOption
   }
+  val getPawnsThatCanMove: Player => List[Pawn] = player =>
+    player.pawns.filter(PawnFunctions.isPawnCanMove)
 
+  val getPawnsAtStart: Player => List[Pawn] = player =>
+    player.pawns.filter(PawnFunctions.isPawnAtStart)
+}
   // val movePawnToStartPosition: (Player, Int, Int, List[Pawn]) => Player =
   //   (player, pawnId, steps, otherPawns) => {
   //     val updatedPawns = player.pawns.map { pawn =>
@@ -92,9 +97,4 @@ object PlayerFunctions {
   // val getPawnsThatCanMove: Player => List[Pawn] = player =>
   //   player.pawns.filterNot(PawnFunctions.isPawnAtStart)
 
-  val getPawnsThatCanMove: Player => List[Pawn] = player =>
-    player.pawns.filter(PawnFunctions.isPawnCanMove)
 
-  val getPawnsAtStart: Player => List[Pawn] = player =>
-    player.pawns.filter(PawnFunctions.isPawnAtStart)
-}

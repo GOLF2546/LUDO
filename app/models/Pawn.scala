@@ -1,6 +1,6 @@
 package models
 
-// import play.api.libs.json._
+import play.api.libs.json._
 
 case class Pawn(
     PawnId: Int,
@@ -10,9 +10,9 @@ case class Pawn(
     state: PawnState
 )
 
-// object Pawn {
-//   implicit val pawnFormat: Format[Pawn] = Json.format[Pawn]
-// }
+object Pawn {
+  implicit val pawnFormat: Format[Pawn] = Json.format[Pawn]
+}
 
 object PawnFunctions {
 
@@ -77,11 +77,7 @@ object PawnFunctions {
         }
       }
     }
-  // val checkPosition: (Int, PawenState, List[Pawn]) => Unit = (newX, state, otherPawns) => {
-  //   otherPawns.find(pawn => getPosition(pawn) == (newX, state)) foreach { pawn =>
-  //     println(s"(0, 0) Pawn ${pawn.PawnId} ${pawn.color}")
-  //   }
-  // }
+
 
   val isPawnAtStart: Pawn => Boolean = pawn =>
     // pawn.initialX == 0 &&
@@ -91,3 +87,8 @@ object PawnFunctions {
     pawn.state == PawnState.Normal || pawn.state == PawnState.Finish
 
 }
+  // val checkPosition: (Int, PawenState, List[Pawn]) => Unit = (newX, state, otherPawns) => {
+  //   otherPawns.find(pawn => getPosition(pawn) == (newX, state)) foreach { pawn =>
+  //     println(s"(0, 0) Pawn ${pawn.PawnId} ${pawn.color}")
+  //   }
+  // }
