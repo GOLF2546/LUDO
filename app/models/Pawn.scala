@@ -1,7 +1,5 @@
 package models
 
-// import play.api.libs.json._
-
 case class Pawn(
     PawnId: Int,
     initialX: Int,
@@ -9,10 +7,6 @@ case class Pawn(
     color: Color,
     state: PawnState
 )
-
-// object Pawn {
-//   implicit val pawnFormat: Format[Pawn] = Json.format[Pawn]
-// }
 
 object PawnFunctions {
 
@@ -71,9 +65,9 @@ object PawnFunctions {
           )
           pawn.copy(state =
             PawnState.Start
-          ) // Create a new Pawn with the updated state
+          ) 
         } else {
-          pawn // Keep the original Pawn unchanged
+          pawn
         }
       }
     }
@@ -87,8 +81,3 @@ object PawnFunctions {
     pawn.state == PawnState.Normal || pawn.state == PawnState.Finish
 
 }
-  // val checkPosition: (Int, PawenState, List[Pawn]) => Unit = (newX, state, otherPawns) => {
-  //   otherPawns.find(pawn => getPosition(pawn) == (newX, state)) foreach { pawn =>
-  //     println(s"(0, 0) Pawn ${pawn.PawnId} ${pawn.color}")
-  //   }
-  // }
