@@ -53,7 +53,6 @@ object PawnFunctions {
           println("No specific match, moving pawn normally.")
           (nextX, pawn.state)
       }
-
       // Perform position check
       checkPosition(newX, newState, otherPawns)
 
@@ -87,8 +86,3 @@ object PawnFunctions {
     pawn.state == PawnState.Normal || pawn.state == PawnState.Finish
 
 }
-  // val checkPosition: (Int, PawenState, List[Pawn]) => Unit = (newX, state, otherPawns) => {
-  //   otherPawns.find(pawn => getPosition(pawn) == (newX, state)) foreach { pawn =>
-  //     println(s"(0, 0) Pawn ${pawn.PawnId} ${pawn.color}")
-  //   }
-  // }

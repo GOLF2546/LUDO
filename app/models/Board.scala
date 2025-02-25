@@ -139,20 +139,7 @@ object Board {
       println(s"You rolled a $diceValue!")
       handleExistingPawn(player, diceValue, allPlayers)
     }
-  // if (diceValue == 6) {
-  //   // println("1. Move a pawn from start")
-  //   // println("2. Move an existing pawn")
-  //   println("1. chose pawn to move")
-  //   StdIn.readLine("Enter your choice (1 or 2): ") match {
-  //     // case "1" => handleNewPawn(player)
-  //     case "1" => handleExistingPawn(player, diceValue, allPlayers)
-  //     case _ =>
-  //       println("Invalid choice. Turn skipped")
-  //       player
-  //   }
-  // } else {
-  //   handleExistingPawn(player, diceValue, allPlayers)
-  // }
+
   val cheatcode: (Player, List[Player], Int) => Player =
     (player, allPlayers, cheat) => {
       println(s"You cheat a $cheat!")
@@ -204,24 +191,6 @@ object Board {
     }
   }
 
-  // val playTurn: GameState => GameState = gameState => {
-  //   val currentPlayer = gameState.players(gameState.currentPlayerIndex)
-  //   if (currentPlayer.id == 1) {
-  //     val gameStateStr = GameStatePrinter.createGameStateStr(gameState)
-  //     println(gameStateStr)
-  //   }
-
-  //   println(s"\nPlayer ${currentPlayer.id}'s turn (${currentPlayer.color})")
-  //   println("Press Enter to roll dice...")
-  //   StdIn.readLine()
-
-  //   val updatedPlayer =
-  //     rollDiceAndWaitForInput(currentPlayer, gameState.players)
-  //   val updatedPlayers =
-  //     gameState.players.updated(gameState.currentPlayerIndex, updatedPlayer)
-
-  //   GameState(updatedPlayers, gameState.currentPlayerIndex)
-  // }
 
   val gameLoop: GameState => Unit = gameState => {
     val updatedState = playTurn(gameState)
