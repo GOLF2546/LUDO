@@ -1,6 +1,6 @@
 package models
 
-import play.api.libs.json._
+// import play.api.libs.json._
 
 case class Pawn(
     PawnId: Int,
@@ -10,9 +10,9 @@ case class Pawn(
     state: PawnState
 )
 
-object Pawn {
-  implicit val pawnFormat: Format[Pawn] = Json.format[Pawn]
-}
+// object Pawn {
+//   implicit val pawnFormat: Format[Pawn] = Json.format[Pawn]
+// }
 
 object PawnFunctions {
 

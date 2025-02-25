@@ -1,12 +1,12 @@
 package models
 
-import play.api.libs.json._
+// import play.api.libs.json._
 
 case class Player(id: Int, color: Color, pawns: List[Pawn])
 
-object Player {
-  implicit val playerFormat: Format[Player] = Json.format[Player]
-}
+// object Player {
+//   implicit val playerFormat: Format[Player] = Json.format[Player]
+// }
 
 object PlayerFunctions {
   import PawnFunctions._

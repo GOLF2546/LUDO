@@ -7,7 +7,7 @@ case class GameState(
     currentPlayerIndex: Int
 )
 
-object Board {
+object Board extends App {
   import PlayerFunctions._
   import PawnFunctions._
   println("DEBUG: Board object initialized")
@@ -240,5 +240,5 @@ object Board {
     }
   }
 
-  // gameLoop(GameState(createInitialPlayers(), 0))
+  gameLoop(GameState(createInitialPlayers(), 0))
 }
