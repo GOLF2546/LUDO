@@ -17,25 +17,28 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)
   import play.api.libs.json._
   import play.api.mvc._
 
-  def startGame: Action[AnyContent] = Action {
-    val players = loadGameState()
-    if (players.nonEmpty) {
-      val formattedPlayers = players.map { player =>
-        // Start with the ID first
-        val playerData: Seq[(String, JsValue)] =
-          Seq("id" -> JsNumber(player.id)) ++
-            player.pawns.sortBy(_.PawnId).map { pawn =>
-              s"initialX Pawn${pawn.PawnId}" -> JsNumber(pawn.initialX)
-            }
-
-        JsObject(playerData) // Convert list of tuples to JsObject
-      }
-
-      Ok(Json.toJson(formattedPlayers))
-    } else {
-      InternalServerError("Failed to load players")
+def startGame: Action[AnyContent] = Action {
+  val players = loadGameState()
+  if (players.nonEmpty) {
+    val formattedPlayers = players.map { player =>
+      Json.obj(
+        "id" -> player.id,
+        "color" -> player.color,
+        "pawns" -> player.pawns.sortBy(_.PawnId).map { pawn =>
+          Json.obj(
+            "PawnId" -> pawn.PawnId,
+            "initialX" -> pawn.initialX,
+            "state" -> pawn.state
+          )
+        }
+      )
     }
+
+    Ok(Json.toJson(formattedPlayers))
+  } else {
+    InternalServerError("Failed to load players")
   }
+}
 
   def handlePawnClick: Action[JsValue] = Action(parse.json) { request =>
     // Extract dice value and color from the request body
