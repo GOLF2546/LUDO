@@ -1,9 +1,9 @@
 @main("Ludo Game", "game-page") {
 <div class="custom-container">
-  <div id="dice-result" style="font-size: 20px; margin: 20px 0">
+  <!-- <div id="dice-result" style="font-size: 20px; margin: 20px 0">
     Click the button to roll the dice!
   </div>
-  <button onclick="rollDice()">🎲 Roll Dice</button>
+  <button onclick="rollDice()">🎲 Roll Dice</button> -->
   <div class="ludo-board">
 
     <div class="game-grid">
@@ -44,7 +44,6 @@
       onclick="homePage()">
   </div>
 </div>
-
 <script>
   // Dice value state
   let diceValue = 0;
@@ -79,62 +78,108 @@
         headers: { Accept: "application/json" },
       });
       const playersData = await response.json();
-      const simplifiedPlayers = mapPlayerData(playersData);
 
+      // Update player positions based on data
+      updatePlayerPositions(playersData);
+
+      // Display simple message instead of raw JSON
+      document.getElementById("dice-result").innerText = "Game initialized. Roll the dice to begin!";
     } catch (error) {
       console.error("Error initializing game:", error);
     }
   }
 
-  function mapPlayerData(playersData) {
-    // Initialize the simplified map
-    const simplifiedMap = {};
+  function updatePlayerPositions(playersData) {
+    clearBoardPawn();
 
-    // Process each player
+    const colorMap = {
+      1: "red",
+      2: "blue",
+      3: "green",
+      4: "yellow"
+    };
+
     playersData.forEach(player => {
-      // Create an array of zeros for each pawn's position (0 means at Start)
-      const pawnPositions = player.pawns.map(pawn =>
-        pawn.state === "Start" ? 0 : pawn.currentPosition || 0
-      );
+      const playerId = player.id;
+      const color = colorMap[playerId];
 
-      // Add to the map using color as key
-      simplifiedMap[player.color] = pawnPositions;
+      // Process each pawn for this player
+      player.pawns.forEach((pawn, pawnIndex) => {
+        const pawnId = `${color}-pawn-${pawnIndex}`;
+
+        if (pawn.state === "Start") {
+          // Pawn is in home base - nothing to do as they're rendered by the server template
+        }
+        else if (pawn.state === "Normal") {
+          // Pawn is on the board at a specific position
+          const cellId = pawn.initialX.toString();
+          if (cellId) {
+            placePawnOnBoard(cellId, color, pawnId, pawn.state);
+          }
+        }
+        else if (pawn.state === "End") {
+          // Pawn has reached the end (could place in center or finish area)
+          // For now, we'll place it in the center
+          placePawnOnBoard(`${color.charAt(0).toUpperCase()}6`, color, pawnId, pawn.state);
+        }
+      });
+    });
+  }
+
+  function clearBoardPawn() {
+    const pathSquares = document.querySelectorAll('.path-square');
+    pathSquares.forEach(square => {
+      // Remove pawn elements but keep the square itself
+      const pawns = square.querySelectorAll('.pawn');
+      pawns.forEach(pawn => pawn.remove());
     });
 
-    return simplifiedMap;
+    // Clear center star positions
+    const centerPositions = ["Y6", "B6", "G6", "R6"];
+    centerPositions.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) element.innerHTML = '';
+    });
   }
 
-  // Function to handle pawn click and send the pawn data with the dice roll value
-  async function selectPawn(playerId, color, pawnId) {
-    if (diceValue === 0) {
-      alert("You must roll the dice first!");
-      return;
-    }
+  function placePawnOnBoard(cellId, color, pawnId, state) {
+    const cell = document.getElementById(cellId);
+    if (cell) {
+      const pawn = document.createElement('div');
+      pawn.id = pawnId;
+      pawn.className = `pawn ${color}-pawn`;
 
-    try {
-      const response = await fetch("@routes.GameController.handlePawnClick.url", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          pawnId: pawnId,
-          color: color,
-          diceValue: diceValue,
-        }),
-      });
+      // Set the background image
+      const imagePath = `/assets/images/components/pawn/${color.charAt(0)}.png`;
+      pawn.style.backgroundImage = `url('${imagePath}')`;
+      pawn.style.backgroundSize = 'contain';
+      pawn.style.backgroundRepeat = 'no-repeat';
+      pawn.style.backgroundPosition = 'center';
 
-      const updatedPlayer = await response.json();
-      console.log("Player updated:", updatedPlayer);
+      if (state === "End") {
+        // Pawn at the End: Smaller size & positioned at the bottom of the star
+        pawn.style.width = '25%';
+        pawn.style.height = '25%';
+        pawn.style.position = 'absolute';
+        pawn.style.bottom = '5%';
+        pawn.style.left = '50%';
+        pawn.style.transform = 'translateX(-50%)';
 
-      // Update the UI based on the response
-      // This would be implemented based on your game logic
-    } catch (error) {
-      console.error("Error handling pawn click:", error);
+        // Ensure the cell has relative positioning
+        cell.style.position = 'relative';
+      } else {
+        // Normal and Start: Full size, centered
+        pawn.style.width = '80%';
+        pawn.style.height = '80%';
+        pawn.style.borderRadius = '50%';
+        pawn.style.margin = 'auto';
+      }
+
+      // Add pawn to the cell
+      cell.appendChild(pawn);
     }
   }
-
-  // Auto-initialization when DOM content is loaded - equivalent to useEffect(() => {}, [])
+  // Auto-initialization when DOM content is loaded
   document.addEventListener("DOMContentLoaded", initializeGame);
 </script>
 }

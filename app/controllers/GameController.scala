@@ -103,7 +103,7 @@ def startGame: Action[AnyContent] = Action {
 
     if (file.exists()) {
       val jsonString = Source.fromFile(gameStateFile).getLines().mkString
-      println(s"Loaded JSON: $jsonString") // Debugging
+      // println(s"Loaded JSON: $jsonString") // Debugging
       Json.parse(jsonString).as[List[Player]]
     } else {
       println("Game state file does not exist, creating initial players.")
