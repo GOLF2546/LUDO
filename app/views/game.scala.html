@@ -147,7 +147,7 @@
     if (cell) {
       const pawn = document.createElement('div');
       pawn.id = pawnId;
-      pawn.className = `pawn ${color}-pawn`;
+      pawn.className = `${color}-pawn`;
 
       // Set the background image
       const imagePath = `/assets/images/components/pawn/${color.charAt(0)}.png`;
@@ -157,16 +157,34 @@
       pawn.style.backgroundPosition = 'center';
 
       if (state === "End") {
-        // Pawn at the End: Smaller size & positioned at the bottom of the star
+        // Set absolute positioning inside the center-star
+        pawn.style.position = 'absolute';
         pawn.style.width = '25%';
         pawn.style.height = '25%';
-        pawn.style.position = 'absolute';
-        pawn.style.bottom = '5%';
-        pawn.style.left = '50%';
-        pawn.style.transform = 'translateX(-50%)';
 
-        // Ensure the cell has relative positioning
-        cell.style.position = 'relative';
+        // Adjust placement based on color
+        switch (color) {
+          case "red":
+            pawn.style.bottom = '0';
+            pawn.style.left = '50%';
+            pawn.style.transform = 'translateX(-50%)';
+            break;
+          case "green":
+            pawn.style.top = '50%';
+            pawn.style.left = '0';
+            pawn.style.transform = 'translateY(-50%)';
+            break;
+          case "yellow":
+            pawn.style.top = '0';
+            pawn.style.left = '50%';
+            pawn.style.transform = 'translateX(-50%)';
+            break;
+          case "blue":
+            pawn.style.top = '50%';
+            pawn.style.right = '0';
+            pawn.style.transform = 'translateY(-50%)';
+            break;
+        }
       } else {
         // Normal and Start: Full size, centered
         pawn.style.width = '80%';
@@ -175,10 +193,12 @@
         pawn.style.margin = 'auto';
       }
 
-      // Add pawn to the cell
+      // Append pawn to the cell
       cell.appendChild(pawn);
     }
   }
+
+
   // Auto-initialization when DOM content is loaded
   document.addEventListener("DOMContentLoaded", initializeGame);
 </script>

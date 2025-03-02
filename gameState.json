@@ -12,17 +12,17 @@
       },
       {
         "PawnId": 2,
-        "initialX": 0,
+        "initialX": 15,
         "initialY": 0,
         "color": "Red",
-        "state": "Start"
+        "state": "Normal"
       },
       {
         "PawnId": 3,
-        "initialX": 0,
+        "initialX": 12,
         "initialY": 0,
         "color": "Red",
-        "state": "Start"
+        "state": "Normal"
       },
       {
         "PawnId": 4,
@@ -39,10 +39,10 @@
     "pawns": [
       {
         "PawnId": 1,
-        "initialX": 0,
+        "initialX": 2,
         "initialY": 0,
         "color": "Blue",
-        "state": "Start"
+        "state": "Normal"
       },
       {
         "PawnId": 2,
@@ -63,7 +63,7 @@
         "initialX": 0,
         "initialY": 0,
         "color": "Blue",
-        "state": "Start"
+        "state": "End"
       }
     ]
   },
@@ -83,7 +83,7 @@
         "initialX": 0,
         "initialY": 0,
         "color": "Green",
-        "state": "Start"
+        "state": "End"
       },
       {
         "PawnId": 3,
@@ -110,7 +110,7 @@
         "initialX": 0,
         "initialY": 0,
         "color": "Yellow",
-        "state": "Start"
+        "state": "End"
       },
       {
         "PawnId": 2,
