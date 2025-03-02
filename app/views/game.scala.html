@@ -1,144 +1,140 @@
 @main("Ludo Game", "game-page") {
-  <div class="custom-container">
-    <div class="ludo-board">
-      <div id="dice-result" style="font-size: 20px; margin: 20px 0">
-        Click the button to roll the dice!
+<div class="custom-container">
+  <div id="dice-result" style="font-size: 20px; margin: 20px 0">
+    Click the button to roll the dice!
+  </div>
+  <button onclick="rollDice()">🎲 Roll Dice</button>
+  <div class="ludo-board">
+
+    <div class="game-grid">
+      <div class="home-base home-base-green">
+        <div class="home-square">@components.pawnAtHome(4, "Green")</div>
       </div>
-      <button onclick="rollDice()">🎲 Roll Dice</button>
-      <div id="game-players" style="font-size: 20px; margin: 20px 0">
-        Loading game...
+
+      <div class="path-vertical">@components.path(18, "Yellow")</div>
+
+      <div class="home-base home-base-yellow">
+        <div class="home-square">@components.pawnAtHome(4, "Yellow")</div>
       </div>
-  
-      <div class="game-grid">
-        <div class="home-base home-base-green">
-          <div class="home-square">@components.pawnAtHome(4, "Green")</div>
-        </div>
-  
-        <div class="path-vertical">@components.path(18, "Yellow")</div>
-  
-        <div class="home-base home-base-yellow">
-          <div class="home-square">@components.pawnAtHome(4, "Yellow")</div>
-        </div>
-  
-        <div class="path-horizontal">@components.path(18, "Green")</div>
-  
-        <div class="center-star">
-          <div id="Y6" class="top-left"></div>
-          <div id="B6" class="top-right"></div>
-          <div id="G6" class="bottom-left"></div>
-          <div id="R6" class="bottom-right"></div>
-        </div>
-  
-        <div class="path-horizontal">@components.path(18, "Blue")</div>
-  
-        <div class="home-base home-base-red">
-          <div class="home-square">@components.pawnAtHome(4, "Red")</div>
-        </div>
-  
-        <div class="path-vertical">@components.path(18, "Red")</div>
-  
-        <div class="home-base home-base-blue">
-          <div class="home-square">@components.pawnAtHome(4, "Blue")</div>
-        </div>
+
+      <div class="path-horizontal">@components.path(18, "Green")</div>
+
+      <div class="center-star">
+        <div id="Y6" class="top-left"></div>
+        <div id="B6" class="top-right"></div>
+        <div id="G6" class="bottom-left"></div>
+        <div id="R6" class="bottom-right"></div>
       </div>
-    </div>
-    <div class="button-container3">
-      <img src="@routes.Assets.versioned("images/components/button/homegamepage.png")" alt="home page" class="home-btn"
-        onclick="homePage()">
+
+      <div class="path-horizontal">@components.path(18, "Blue")</div>
+
+      <div class="home-base home-base-red">
+        <div class="home-square">@components.pawnAtHome(4, "Red")</div>
+      </div>
+
+      <div class="path-vertical">@components.path(18, "Red")</div>
+
+      <div class="home-base home-base-blue">
+        <div class="home-square">@components.pawnAtHome(4, "Blue")</div>
+      </div>
     </div>
   </div>
-  
-  <script>
-    // Dice value state
-    let diceValue = 0;
-  
-    // Navigation function
-    function homePage() {
-      window.location.href = "@routes.HomeController.index()";
-    }
-  
-    // Function to roll the dice and display the result
-    async function rollDice() {
-      try {
-        const response = await fetch("@routes.DiceController.rollDice.url", {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        });
-        const result = await response.json();
-        diceValue = result;
-        document.getElementById("dice-result").innerText = "Dice Roll: " + result;
-      } catch (error) {
-        console.error("Error rolling dice:", error);
-        document.getElementById("dice-result").innerText = "Failed to roll the dice.";
-      }
-    }
-  
-    // Function to initialize the game - similar to useEffect
-    async function initializeGame() {
-      try {
-        const response = await fetch("@routes.GameController.startGame.url", {
-          method: "GET",
-          headers: { Accept: "application/json" },
-        });
-        const players = await response.json();
-  
-        // Use functional approach with immutable transformations
-        const playerDetails = players
-          .map(player => {
-            const pawnImages = player.pawns
-              .map(p => {
-                // Construct the image path dynamically
-                const imagePath = `/assets/images/components/pawn/${p.color.charAt(0).toLowerCase()}.png`;
-  
-                // Return the image HTML tag with onclick handler to select the pawn
-                return `<img src="${imagePath}" alt="${p.color} pawn" onclick="selectPawn(${player.id}, '${p.color}', ${p.pawnId})">`;
-              })
-              .join(" ");
-  
-            return `Player ${player.id} (${player.color}): ${pawnImages}`;
-          })
-          .join("<br>");
-  
-        document.getElementById("game-players").innerHTML = playerDetails;
-      } catch (error) {
-        console.error("Error initializing game:", error);
-        document.getElementById("game-players").innerText = "Failed to initialize the game.";
-      }
-    }
-  
-    // Function to handle pawn click and send the pawn data with the dice roll value
-    async function selectPawn(playerId, color, pawnId) {
-      if (diceValue === 0) {
-        alert("You must roll the dice first!");
-        return;
-      }
-  
-      try {
-        const response = await fetch("@routes.GameController.handlePawnClick.url", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            pawnId: pawnId,
-            color: color,
-            diceValue: diceValue,
-          }),
-        });
-  
-        const updatedPlayer = await response.json();
-        console.log("Player updated:", updatedPlayer);
-  
-        // Update the UI based on the response
-        // This would be implemented based on your game logic
-      } catch (error) {
-        console.error("Error handling pawn click:", error);
-      }
-    }
-  
-    // Auto-initialization when DOM content is loaded - equivalent to useEffect(() => {}, [])
-    document.addEventListener("DOMContentLoaded", initializeGame);
-  </script>
+  <div class="button-container3">
+    <img src="@routes.Assets.versioned("images/components/button/homegamepage.png")" alt="home page" class="home-btn"
+      onclick="homePage()">
+  </div>
+</div>
+
+<script>
+  // Dice value state
+  let diceValue = 0;
+
+  // Navigation function
+  function homePage() {
+    window.location.href = "@routes.HomeController.index()";
   }
+
+  // Function to roll the dice and display the result
+  async function rollDice() {
+    try {
+      const response = await fetch("@routes.DiceController.rollDice.url", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      const result = await response.json();
+      diceValue = result;
+      document.getElementById("dice-result").innerText = "Dice Roll: " + result;
+    } catch (error) {
+      console.error("Error rolling dice:", error);
+      document.getElementById("dice-result").innerText = "Failed to roll the dice.";
+    }
+  }
+
+  async function initializeGame() {
+    try {
+      const response = await fetch("@routes.GameController.startGame.url", {
+        method: "GET",
+        headers: { Accept: "application/json" },
+      });
+      const playersData = await response.json();
+      const simplifiedPlayers = mapPlayerData(playersData);
+
+    } catch (error) {
+      console.error("Error initializing game:", error);
+    }
+  }
+
+  function mapPlayerData(playersData) {
+    // Initialize the simplified map
+    const simplifiedMap = {};
+
+    // Process each player
+    playersData.forEach(player => {
+      // Create an array of zeros for each pawn's position (0 means at Start)
+      const pawnPositions = player.pawns.map(pawn =>
+        pawn.state === "Start" ? 0 : pawn.currentPosition || 0
+      );
+
+      // Add to the map using color as key
+      simplifiedMap[player.color] = pawnPositions;
+    });
+
+    return simplifiedMap;
+  }
+
+  // Function to handle pawn click and send the pawn data with the dice roll value
+  async function selectPawn(playerId, color, pawnId) {
+    if (diceValue === 0) {
+      alert("You must roll the dice first!");
+      return;
+    }
+
+    try {
+      const response = await fetch("@routes.GameController.handlePawnClick.url", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pawnId: pawnId,
+          color: color,
+          diceValue: diceValue,
+        }),
+      });
+
+      const updatedPlayer = await response.json();
+      console.log("Player updated:", updatedPlayer);
+
+      // Update the UI based on the response
+      // This would be implemented based on your game logic
+    } catch (error) {
+      console.error("Error handling pawn click:", error);
+    }
+  }
+
+  // Auto-initialization when DOM content is loaded - equivalent to useEffect(() => {}, [])
+  document.addEventListener("DOMContentLoaded", initializeGame);
+</script>
+}

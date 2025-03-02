@@ -9,15 +9,29 @@ import scala.io.Source
 import models._
 
 @Singleton
-class GameController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class GameController @Inject() (val controllerComponents: ControllerComponents)
+    extends BaseController {
 
   private val gameStateFile = "gameState.json"
 
-  // Endpoint to start the game and return players
+  import play.api.libs.json._
+  import play.api.mvc._
+
   def startGame: Action[AnyContent] = Action {
     val players = loadGameState()
     if (players.nonEmpty) {
-      Ok(Json.toJson(players))
+      val formattedPlayers = players.map { player =>
+        // Start with the ID first
+        val playerData: Seq[(String, JsValue)] =
+          Seq("id" -> JsNumber(player.id)) ++
+            player.pawns.sortBy(_.PawnId).map { pawn =>
+              s"initialX Pawn${pawn.PawnId}" -> JsNumber(pawn.initialX)
+            }
+
+        JsObject(playerData) // Convert list of tuples to JsObject
+      }
+
+      Ok(Json.toJson(formattedPlayers))
     } else {
       InternalServerError("Failed to load players")
     }

@@ -1,1 +1,138 @@
-[{"id":1,"color":"Red","pawns":[{"PawnId":1,"initialX":0,"initialY":16,"color":"Red","state":"End"},{"PawnId":2,"initialX":0,"initialY":0,"color":"Red","state":"Start"},{"PawnId":3,"initialX":0,"initialY":0,"color":"Red","state":"Start"},{"PawnId":4,"initialX":0,"initialY":0,"color":"Red","state":"Start"}]},{"id":2,"color":"Blue","pawns":[{"PawnId":1,"initialX":0,"initialY":0,"color":"Blue","state":"Start"},{"PawnId":2,"initialX":0,"initialY":0,"color":"Blue","state":"Start"},{"PawnId":3,"initialX":4,"initialY":10,"color":"Blue","state":"Normal"},{"PawnId":4,"initialX":0,"initialY":0,"color":"Blue","state":"Start"}]},{"id":3,"color":"Green","pawns":[{"PawnId":1,"initialX":26,"initialY":6,"color":"Green","state":"Normal"},{"PawnId":2,"initialX":0,"initialY":0,"color":"Green","state":"Start"},{"PawnId":3,"initialX":0,"initialY":0,"color":"Green","state":"Start"},{"PawnId":4,"initialX":0,"initialY":0,"color":"Green","state":"Start"}]},{"id":4,"color":"Yellow","pawns":[{"PawnId":1,"initialX":39,"initialY":6,"color":"Yellow","state":"Normal"},{"PawnId":2,"initialX":39,"initialY":6,"color":"Yellow","state":"Normal"},{"PawnId":3,"initialX":0,"initialY":0,"color":"Yellow","state":"Start"},{"PawnId":4,"initialX":0,"initialY":0,"color":"Yellow","state":"Start"}]}]
+[
+  {
+    "id": 1,
+    "color": "Red",
+    "pawns": [
+      {
+        "PawnId": 1,
+        "initialX": 0,
+        "initialY": 16,
+        "color": "Red",
+        "state": "End"
+      },
+      {
+        "PawnId": 2,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Red",
+        "state": "Start"
+      },
+      {
+        "PawnId": 3,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Red",
+        "state": "Start"
+      },
+      {
+        "PawnId": 4,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Red",
+        "state": "Start"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "color": "Blue",
+    "pawns": [
+      {
+        "PawnId": 1,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Blue",
+        "state": "Start"
+      },
+      {
+        "PawnId": 2,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Blue",
+        "state": "Start"
+      },
+      {
+        "PawnId": 3,
+        "initialX": 4,
+        "initialY": 10,
+        "color": "Blue",
+        "state": "Normal"
+      },
+      {
+        "PawnId": 4,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Blue",
+        "state": "Start"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "color": "Green",
+    "pawns": [
+      {
+        "PawnId": 1,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Green",
+        "state": "Start"
+      },
+      {
+        "PawnId": 2,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Green",
+        "state": "Start"
+      },
+      {
+        "PawnId": 3,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Green",
+        "state": "Start"
+      },
+      {
+        "PawnId": 4,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Green",
+        "state": "Start"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "color": "Yellow",
+    "pawns": [
+      {
+        "PawnId": 1,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Yellow",
+        "state": "Start"
+      },
+      {
+        "PawnId": 2,
+        "initialX": 39,
+        "initialY": 6,
+        "color": "Yellow",
+        "state": "Normal"
+      },
+      {
+        "PawnId": 3,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Yellow",
+        "state": "Start"
+      },
+      {
+        "PawnId": 4,
+        "initialX": 0,
+        "initialY": 0,
+        "color": "Yellow",
+        "state": "Start"
+      }
+    ]
+  }
+]
