@@ -96,9 +96,9 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)
   // Helper function to load the game state from the JSON file
   private def loadGameState(): List[Player] = {
     val file = new File(gameStateFile)
-    println(
-      s"Trying to load game state from: ${file.getAbsolutePath}"
-    ) // Debugging
+    // println(
+    //   s"Trying to load game state from: ${file.getAbsolutePath}"
+    // ) // Debugging
 
     if (file.exists()) {
       val jsonString = Source.fromFile(gameStateFile).getLines().mkString
