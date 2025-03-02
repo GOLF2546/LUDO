@@ -23,10 +23,8 @@ def startGame: Action[AnyContent] = Action {
     val formattedPlayers = players.map { player =>
       Json.obj(
         "id" -> player.id,
-        "color" -> player.color,
         "pawns" -> player.pawns.sortBy(_.PawnId).map { pawn =>
           Json.obj(
-            "PawnId" -> pawn.PawnId,
             "initialX" -> pawn.initialX,
             "state" -> pawn.state
           )
