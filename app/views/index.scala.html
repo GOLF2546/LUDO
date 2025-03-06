@@ -11,13 +11,5 @@
     </div>
 </div>
 
-<script>
-    function startGame() {
-        window.location.href = '@routes.HomeController.start()';
-    }
-
-    function howTo() {
-        window.location.href = "@routes.HomeController.howtoplay()";
-    }
-</script>
+<script src="@routes.Assets.versioned("javascripts/ludo-game.js")"></script>
 }
