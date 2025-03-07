@@ -51,7 +51,22 @@ async function initializeGame() {
     console.error("Error initializing game:", error);
   }
 }
+async function restart(params) {
+  try{
+    const response = await fetch("/restart", {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+    updatePlayerPositions(playersData);
 
+    // Display simple message instead of raw JSON
+    document.getElementById("dice-result").innerText =
+      "Game initialized. Roll the dice to begin!";
+  } catch (error) {
+    console.error("Error initializing game:", error);
+  }
+  
+}
 function updatePlayerPositions(playersData) {
   clearBoardPawn();
 

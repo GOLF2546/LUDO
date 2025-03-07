@@ -1,16 +1,76 @@
 package models
 
 import scala.io.StdIn
-
+import play.api.libs.json._
+import java.io.{File, PrintWriter}
 case class GameState(
     players: List[Player],
     currentPlayerIndex: Int
 )
+object GameState {
+  implicit val gameStateFormat: Format[GameState] = Json.format[GameState]
+}
 
 object Board {
   import PlayerFunctions._
   import PawnFunctions._
   println("DEBUG: Board object initialized")
+val playGame: (GameState, Int, Int) => GameState =
+    (gameState, pawnId, diceValue) => {
+      val player = gameState.players(gameState.currentPlayerIndex)
+      val pawnOption = player.pawns.find(_.PawnId == pawnId)
+      // Debug if pawn is found
+      println(
+        s"DEBUG: Pawn found: ${pawnOption.map(_.PawnId).getOrElse("None")}"
+      )
+      val updatedPlayer = pawnOption match {
+        case Some(pawn)
+            if PawnFunctions.isPawnCanMove(pawn) || diceValue == 6 =>
+          println(s"DEBUG: Pawn can move: ${pawn.PawnId}")
+          val otherPlayerPawns =
+            gameState.players.filter(_.id != player.id).flatMap(_.pawns)
+          val updatedPlayer = PlayerFunctions.movePawn(
+            player,
+            pawnId,
+            diceValue,
+            otherPlayerPawns
+          )
+          println(
+            s"DEBUG: Updated Player pawns: ${updatedPlayer.pawns.map(_.PawnId).mkString(", ")}"
+          )
+          updatedPlayer
+
+        case Some(pawn)
+            if PawnFunctions.isPawnAtStart(pawn) && diceValue == 6 =>
+          println(s"DEBUG: Pawn at start: ${pawn.PawnId}, dice value is 6")
+          val otherPlayerPawns =
+            gameState.players.filter(_.id != player.id).flatMap(_.pawns)
+          val updatedPlayer = PlayerFunctions.movePawn(
+            player,
+            pawnId,
+            diceValue,
+            otherPlayerPawns
+          )
+          println(
+            s"DEBUG: Updated Player pawns: ${updatedPlayer.pawns.map(_.PawnId).mkString(", ")}"
+          )
+          updatedPlayer
+
+        case _ =>
+          println("DEBUG: Invalid move or no valid pawn to move.")
+          player
+      }
+
+      // Update the players list with the updated player
+      val updatedPlayers = gameState.players.updated(gameState.currentPlayerIndex, updatedPlayer)
+
+      // Increment the currentPlayerIndex
+      val nextPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length
+
+      // Return the updated GameState
+      GameState(updatedPlayers, nextPlayerIndex)
+    }
+
   val dice: () => Int = () => scala.util.Random.nextInt(6) + 1
   def createInitialPlayers(): List[Player] = {
     val playerColors = List(Color.Red, Color.Blue, Color.Green, Color.Yellow)

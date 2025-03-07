@@ -17,103 +17,138 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)
   import play.api.libs.json._
   import play.api.mvc._
 
-def startGame: Action[AnyContent] = Action {
-  val players = loadGameState()
-  if (players.nonEmpty) {
-    val formattedPlayers = players.map { player =>
-      Json.obj(
-        "id" -> player.id,
-        "pawns" -> player.pawns.sortBy(_.PawnId).map { pawn =>
-          Json.obj(
-            "initialX" -> pawn.initialX,
-            "state" -> pawn.state
-          )
-        }
-      )
+  def startGame: Action[AnyContent] = Action {
+    val gameState = loadGameState()
+    val players = gameState.players
+    if (players.nonEmpty) {
+      val formattedPlayers = players.map { player =>
+        Json.obj(
+          "id" -> player.id,
+          "pawns" -> player.pawns.sortBy(_.PawnId).map { pawn =>
+            Json.obj(
+              "initialX" -> pawn.initialX,
+              "state" -> pawn.state
+            )
+          }
+        )
+      }    
+      val jsonResponse = Json.toJson(formattedPlayers)
+      println(s"DEBUG: startGame response - $jsonResponse")
+      Ok(jsonResponse)
+    } else {
+      InternalServerError("Failed to load players")
     }
+  }
+  def restartGame: Action[AnyContent] = Action {
+    val players = Board.createInitialPlayers()
+    saveGameState(GameState(players, 1))
+    Ok("Game restarted")
+  }
+def handleGameClick: Action[JsValue] = Action(parse.json) { request =>
+  // Extract dice value and color from the request body
+  val diceValue = (request.body \ "diceValue").as[Int]
+  val color = (request.body \ "color").as[String]
+  val pawnId = (request.body \ "pawnId").as[Int]
 
-    Ok(Json.toJson(formattedPlayers))
+  // Load the current game state
+  val gameState = loadGameState()
+  val players = gameState.players
+
+  // Find the current player based on the currentPlayerIndex
+  val currentPlayer = players(gameState.currentPlayerIndex)
+
+  println(
+    s"DEBUG: Received handleGameClick - diceValue=$diceValue, color=$color, pawnId=$pawnId, Players=$players"
+  )
+  println(s"DEBUG: Players loaded: ${players.map(_.id).mkString(", ")}")
+
+  if (currentPlayer.color.toString == color) {
+    // Print player details for debugging
+    println(
+      s"DEBUG: Player found - ID: ${currentPlayer.id}, Color: ${currentPlayer.color}, Pawn ID: $pawnId"
+    )
+
+    // Call the playGame method with the player details
+    val updatedGameState = Board.playGame(gameState, pawnId, diceValue)
+
+    // Save the updated game state
+    saveGameState(updatedGameState)
+
+    // Return the updated player as a response
+    val updatedPlayer = updatedGameState.players.find(_.id == currentPlayer.id).get
+    Ok(Json.toJson(updatedPlayer))
   } else {
-    InternalServerError("Failed to load players")
+    // If no player is found, return a BadRequest
+    println("ERROR: Player not found in the current players list.")
+    BadRequest("Player not found")
   }
 }
+  // def handlePawnClick: Action[JsValue] = Action(parse.json) { request =>
+  //   // Extract dice value and color from the request body
+  //   val diceValue = (request.body \ "diceValue").as[Int]
+  //   val color = (request.body \ "color").as[String]
+  //   val pawnId = (request.body \ "pawnId").as[Int]
 
-  def handlePawnClick: Action[JsValue] = Action(parse.json) { request =>
-    // Extract dice value and color from the request body
-    val diceValue = (request.body \ "diceValue").as[Int]
-    val color = (request.body \ "color").as[String]
-    val pawnId = (request.body \ "pawnId").as[Int]
+  //   // Load the current game state
+  //   val gameState = loadGameState()
+  //   val players = gameState.players
 
-    // Load the current game state (players list)
-    val players = loadGameState()
+  //   // Find the current player based on the color
+  //   val currentPlayer = players.find(_.color.toString == color)
 
-    // Find the current player based on the color
-    val currentPlayer = players.find(_.color.toString == color)
+  //   println(
+  //     s"DEBUG: Received handlePawnClick - diceValue=$diceValue, color=$color, pawnId=$pawnId ,Players=$players"
+  //   )
+  //   println(s"DEBUG: Players loaded: ${players.map(_.id).mkString(", ")}")
 
-    println(
-      s"DEBUG: Received handlePawnClick - diceValue=$diceValue, color=$color, pawnId=$pawnId ,Players=$players"
-    )
-    println(s"DEBUG: Players loaded: ${players.map(_.id).mkString(", ")}")
+  //   currentPlayer match {
+  //     case Some(player) =>
+  //       // Print player details for debugging
+  //       println(
+  //         s"DEBUG: Player found - ID: ${player.id}, Color: ${player.color}, Pawn ID: $pawnId"
+  //       )
 
-    // Ensure that Board.handlePawnClick is accessible and not null
-    // println(
-    //   s"DEBUG: Checking if Board.handlePawnClick is null: ${Board.handlePawnClick == null}"
-    // )
+  //       // Call the handlePawnClick method with the player details
+  //       val updatedPlayer =
+  //         Board.handlePawnClick(player, pawnId, diceValue, players)
 
-    currentPlayer match {
-      case Some(player) =>
-        // Print player details for debugging
-        println(
-          s"DEBUG: Player found - ID: ${player}, Color: ${player.color}, Pawn ID: $pawnId"
-        )
+  //       // Save the updated game state
+  //       saveGameState(
+  //         GameState(
+  //           players.map {
+  //             case p if p.id == updatedPlayer.id => updatedPlayer
+  //             case p                             => p
+  //           },
+  //           gameState.currentPlayerIndex
+  //         )
+  //       )
 
-        // Call the handlePawnClick method with the player details before checking for null
-        println("you in this case?")
-        val updatedPlayer =
-          Board.handlePawnClick(player, pawnId, diceValue, players)
+  //       // Return the updated player as a response
+  //       Ok(Json.toJson(updatedPlayer))
 
-        // If handlePawnClick is null, log and return an error
-        if (updatedPlayer == null) {
-          println("ERROR: Board.handlePawnClick returned null!")
-          InternalServerError("Error in processing pawn move.")
-        } else {
-          // Save the updated game state
-          saveGameState(players.map {
-            case p if p.id == updatedPlayer.id => updatedPlayer
-            case p                             => p
-          })
+  //     case None =>
+  //       // If no player is found, return a BadRequest
+  //       println("ERROR: Player not found in the current players list.")
+  //       BadRequest("Player not found")
+  //   }
+  // }
 
-          // Return the updated player as a response
-          Ok(Json.toJson(updatedPlayer))
-        }
-
-      case None =>
-        // If no player is found, return a BadRequest
-        println("ERROR: Player not found in the current players list.")
-        BadRequest("Player not found")
-    }
-  }
-
-  // Helper function to load the game state from the JSON file
-  private def loadGameState(): List[Player] = {
+  private def loadGameState(): GameState = {
     val file = new File(gameStateFile)
-    // println(
-    //   s"Trying to load game state from: ${file.getAbsolutePath}"
-    // ) // Debugging
-
     if (file.exists()) {
       val jsonString = Source.fromFile(gameStateFile).getLines().mkString
-      // println(s"Loaded JSON: $jsonString") // Debugging
-      Json.parse(jsonString).as[List[Player]]
+      Json.parse(jsonString).as[GameState]
     } else {
       println("Game state file does not exist, creating initial players.")
-      Board.createInitialPlayers()
+      val players = Board.createInitialPlayers()
+      val gameState = GameState(players, 1)
+      saveGameState(gameState)
+      gameState
     }
   }
 
-  // Helper function to save the game state to the JSON file
-  private def saveGameState(players: List[Player]): Unit = {
-    val jsonString = Json.toJson(players).toString()
+  private def saveGameState(gameState: GameState): Unit = {
+    val jsonString = Json.toJson(gameState).toString()
     val writer = new PrintWriter(new File(gameStateFile))
     writer.write(jsonString)
     writer.close()

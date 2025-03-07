@@ -13,4 +13,4 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 GET     /rollDice                  controllers.DiceController.rollDice
 GET     /startGame                 controllers.GameController.startGame
-POST    /handlePawnClick           controllers.GameController.handlePawnClick
+POST    /handleGameClick            controllers.GameController.handleGameClick
