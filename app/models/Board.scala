@@ -15,6 +15,8 @@ object Board {
   import PlayerFunctions._
   import PawnFunctions._
   println("DEBUG: Board object initialized")
+
+//for handleGameClick
 val playGame: (GameState, Int, Int) => GameState =
     (gameState, pawnId, diceValue) => {
       val player = gameState.players(gameState.currentPlayerIndex)
@@ -83,64 +85,7 @@ val playGame: (GameState, Int, Int) => GameState =
     }
   }
 
-  val handlePawnClick: (Player, Int, Int, List[Player]) => Player =
-    (player, pawnId, diceValue, allPlayers) => {
-      println("DEBUG: Entered handlePawnClick function")
-      println(
-        s"DEBUG: Received player=${player.id}, pawnId=$pawnId, diceValue=$diceValue"
-      )
-      // Find the pawn with the given pawnId
-      val pawnOption = player.pawns.find(_.PawnId == pawnId)
-
-      // Debug if pawn is found
-      println(
-        s"DEBUG: Pawn found: ${pawnOption.map(_.PawnId).getOrElse("None")}"
-      )
-
-      pawnOption match {
-        case Some(pawn)
-            if PawnFunctions.isPawnCanMove(pawn) || diceValue == 6 =>
-          println(s"DEBUG: Pawn can move: ${pawn.PawnId}")
-          val otherPlayerPawns =
-            allPlayers.filter(_.id != player.id).flatMap(_.pawns)
-          val updatedPlayer = PlayerFunctions.movePawn(
-            player,
-            pawnId,
-            diceValue,
-            otherPlayerPawns
-          )
-          println(
-            s"DEBUG: Updated Player pawns: ${updatedPlayer.pawns.map(_.PawnId).mkString(", ")}"
-          )
-          updatedPlayer
-
-        case Some(pawn)
-            if PawnFunctions.isPawnAtStart(pawn) && diceValue == 6 =>
-          println(s"DEBUG: Pawn at start: ${pawn.PawnId}, dice value is 6")
-          val otherPlayerPawns =
-            allPlayers.filter(_.id != player.id).flatMap(_.pawns)
-          val updatedPlayer = PlayerFunctions.movePawn(
-            player,
-            pawnId,
-            diceValue,
-            otherPlayerPawns
-          )
-          println(
-            s"DEBUG: Updated Player pawns: ${updatedPlayer.pawns.map(_.PawnId).mkString(", ")}"
-          )
-          updatedPlayer
-
-        case _ =>
-          println("DEBUG: Invalid move or no valid pawn to move.")
-          player
-      }
-    }
-  // val handleNewPawn: Player => Player = player => {
-  //   PlayerFunctions.movePawnToStartPosition(player)
-  // }
-//   val handleNewPawn: (Player, Int) => Player = (player, pawnId) => {
-//   PlayerFunctions.movePawnToStartPosition(player, pawnId)
-// }
+  
 
   val handleExistingPawn: (Player, Int, List[Player]) => Player =
     (player, diceValue, allPlayers) => {

@@ -44,7 +44,7 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)
   def handleGameClick: Action[JsValue] = Action(parse.json) { request =>
     // Extract dice value and color from the request body
     val diceValue = (request.body \ "diceValue").as[Int]
-    val color = (request.body \ "color").as[String]
+    val color = (request.body \ "color").as[String].toLowerCase
     val pawnId = (request.body \ "pawnId").as[Int]
 
     // Load the current game state
@@ -58,8 +58,10 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)
       s"DEBUG: Received handleGameClick - diceValue=$diceValue, color=$color, pawnId=$pawnId, Players=$players"
     )
     println(s"DEBUG: Players loaded: ${players.map(_.id).mkString(", ")}")
+    println(s"DEBUG: Current player index: ${gameState.currentPlayerIndex}")
+    println(s"DEBUG: Current player: ${currentPlayer}")
 
-    if (currentPlayer.color.toString == color) {
+    if (currentPlayer.color.toString.toLowerCase == color) {
       // Print player details for debugging
       println(
         s"DEBUG: Player found - ID: ${currentPlayer.id}, Color: ${currentPlayer.color}, Pawn ID: $pawnId"
@@ -78,6 +80,9 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)
     } else {
       // If no player is found, return a BadRequest
       println("ERROR: Player not found in the current players list.")
+      println(
+        s"DEBUG: Expected color: $color, Current player color: ${currentPlayer.color}"
+      )
       BadRequest("Player not found")
     }
   }

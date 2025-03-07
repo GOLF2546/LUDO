@@ -34,6 +34,8 @@ async function rollDice() {
 }
 
 async function selectPawn(playerId, color, pawnId) {
+  console.log(`DEBUG: selectPawn called with color=${color}, playerId=${playerId}, pawnId=${pawnId}`); // Debugging
+
   if (!pawnId) {
     console.error("Pawn ID is missing!");
     alert("Error: Pawn ID is missing.");
@@ -63,11 +65,15 @@ async function selectPawn(playerId, color, pawnId) {
     });
 
     if (!response.ok) {
-      throw new Error(`Server error: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`Server error: ${response.status} - ${errorText}`);
     }
 
     const updatedPlayer = await response.json();
     console.log("Player updated:", updatedPlayer);
+
+    // Debugging: Print the updated player data
+    console.log("DEBUG: updatedPlayer data:", updatedPlayer);
 
     // Update the UI
     updatePlayerPositions(updatedPlayer);
@@ -76,7 +82,6 @@ async function selectPawn(playerId, color, pawnId) {
     alert("Failed to move the pawn. Please try again.");
   }
 }
-
 
 async function startGame() {
   try {
@@ -92,6 +97,7 @@ async function startGame() {
 
     // Place each pawn on the board based on its position
     players.forEach((player) => {
+      console.log(`DEBUG: Processing player with color=${player.color}`); // Debugging
       player.pawns.forEach((pawn) => {
         const cellId = pawn.initialX.toString(); // Assuming initialX is the cell ID
         renderPawnOnBoard(cellId, player.id, player.color.toLowerCase(), pawn.PawnId, pawn.state);
@@ -119,10 +125,15 @@ async function startGame() {
       "Failed to start the game.";
   }
 }
+
 function renderPawnOnBoard(cellId, playerId, color, pawnId, state) {
+  console.log(`DEBUG: renderPawnOnBoard called with color=${color}`); // Debugging
   placePawnOnBoard(cellId, playerId, color, pawnId, state);
 }
+
 function renderPawnImage(playerId, color, pawnId) {
+  console.log(`DEBUG: renderPawnImage called with color=${color}`); // Debugging
+
   if (!pawnId) {
     console.error("Pawn ID is missing in renderPawnImage!");
   }
@@ -132,6 +143,8 @@ function renderPawnImage(playerId, color, pawnId) {
 }
 
 function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
+  console.log(`DEBUG: placePawnOnBoard called with color=${color}`); // Debugging
+
   if (!pawnId) {
     console.error("❌ Missing pawnId in placePawnOnBoard! Check updatePlayerPositions.", {
       cellId, playerId, color, state
@@ -193,8 +206,6 @@ function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
   }
 }
 
-
-
 function clearBoardPawn() {
   const pathSquares = document.querySelectorAll(".path-square");
   pathSquares.forEach((square) => {
@@ -229,8 +240,9 @@ async function initializeGame() {
     console.error("Error initializing game:", error);
   }
 }
+
 async function restart() {
-  try{
+  try {
     const response = await fetch("/restartGame", {
       method: "GET",
       headers: { Accept: "application/json" },
@@ -244,8 +256,8 @@ async function restart() {
   } catch (error) {
     console.error("Error initializing game:", error);
   }
-  
 }
+
 function updatePlayerPositions(playersData) {
   clearBoardPawn();
 
@@ -256,7 +268,10 @@ function updatePlayerPositions(playersData) {
     4: "yellow",
   };
 
-  playersData.forEach((player) => {
+  // Ensure playersData is an array
+  const playersArray = Array.isArray(playersData) ? playersData : [playersData];
+
+  playersArray.forEach((player) => {
     const playerId = player.id;
     const color = colorMap[playerId];
 
@@ -283,12 +298,7 @@ function updatePlayerPositions(playersData) {
         );
       }
     });
-    
   });
 }
-
-
-
-
 // Auto-initialization when DOM content is loaded
 document.addEventListener("DOMContentLoaded", initializeGame);
