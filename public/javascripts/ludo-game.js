@@ -33,6 +33,70 @@ async function rollDice() {
   }
 }
 
+async function initializeGame() {
+  try {
+    const response = await fetch("/startGame", {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+    const playersData = await response.json();
+
+    // Update player positions based on data
+    updatePlayerPositions(playersData);
+
+    // Display simple message instead of raw JSON
+    document.getElementById("dice-result").innerText =
+      "Game initialized. Roll the dice to begin!";
+  } catch (error) {
+    console.error("Error initializing game:", error);
+  }
+}
+
+async function restart() {
+  try {
+    const response = await fetch("/restartGame", {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+    const playersData = await response.json();
+    updatePlayerPositions(playersData);
+
+    // Display simple message instead of raw JSON
+    document.getElementById("dice-result").innerText =
+      "Game initialized. Roll the dice to begin!";
+  } catch (error) {
+    console.error("Error initializing game:", error);
+  }
+}
+async function startGame() {
+  try {
+    const response = await fetch("/startGame", {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+    const gameState = await response.json();
+    const players = gameState.players;
+
+    // Clear existing pawns from the board
+    clearBoardPawn();
+
+    // Place each pawn on the board based on its position
+    players.forEach((player) => {
+      console.log(`DEBUG: Processing player with color=${player.color}`); // Debugging
+      player.pawns.forEach((pawn) => {
+        const cellId = pawn.initialX.toString(); // Assuming initialX is the cell ID
+        placePawnOnBoard(cellId, player.id, player.color, pawn.PawnId, pawn.state);
+      });
+    });
+
+    document.getElementById("game-players").innerHTML = playerDetails;
+  } catch (error) {
+    console.error("Error starting game:", error);
+    document.getElementById("game-players").innerText =
+      "Failed to start the game.";
+  }
+}
+
 async function selectPawn(playerId, color, pawnId) {
   console.log(`DEBUG: selectPawn called with color=${color}, playerId=${playerId}, pawnId=${pawnId}`); // Debugging
 
@@ -81,65 +145,6 @@ async function selectPawn(playerId, color, pawnId) {
     console.error("Error handling pawn click:", error);
     alert("Failed to move the pawn. Please try again.");
   }
-}
-
-async function startGame() {
-  try {
-    const response = await fetch("/startGame", {
-      method: "GET",
-      headers: { Accept: "application/json" },
-    });
-    const gameState = await response.json();
-    const players = gameState.players;
-
-    // Clear existing pawns from the board
-    clearBoardPawn();
-
-    // Place each pawn on the board based on its position
-    players.forEach((player) => {
-      console.log(`DEBUG: Processing player with color=${player.color}`); // Debugging
-      player.pawns.forEach((pawn) => {
-        const cellId = pawn.initialX.toString(); // Assuming initialX is the cell ID
-        renderPawnOnBoard(cellId, player.id, player.color.toLowerCase(), pawn.PawnId, pawn.state);
-      });
-    });
-
-    // Generate player details for display
-    let playerDetails = players
-      .map((player) => {
-        let pawnImages = player.pawns
-          .map((p) => {
-            // Render the pawn images dynamically
-            return renderPawnImage(player.id, player.color, p.PawnId);
-          })
-          .join(" ");
-
-        return `Player ${player.id} (${player.color}): ${pawnImages}`;
-      })
-      .join("<br>");
-
-    document.getElementById("game-players").innerHTML = playerDetails;
-  } catch (error) {
-    console.error("Error starting game:", error);
-    document.getElementById("game-players").innerText =
-      "Failed to start the game.";
-  }
-}
-
-function renderPawnOnBoard(cellId, playerId, color, pawnId, state) {
-  console.log(`DEBUG: renderPawnOnBoard called with color=${color}`); // Debugging
-  placePawnOnBoard(cellId, playerId, color, pawnId, state);
-}
-
-function renderPawnImage(playerId, color, pawnId) {
-  console.log(`DEBUG: renderPawnImage called with color=${color}`); // Debugging
-
-  if (!pawnId) {
-    console.error("Pawn ID is missing in renderPawnImage!");
-  }
-  
-  const imagePath = `/assets/images/components/pawn/${color.charAt(0).toLowerCase()}.png`;
-  return `<img src="${imagePath}" alt="${color} pawn" onclick="selectPawn(${playerId}, '${color}', ${pawnId})">`;
 }
 
 function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
@@ -222,50 +227,16 @@ function clearBoardPawn() {
   });
 }
 
-async function initializeGame() {
-  try {
-    const response = await fetch("/startGame", {
-      method: "GET",
-      headers: { Accept: "application/json" },
-    });
-    const playersData = await response.json();
 
-    // Update player positions based on data
-    updatePlayerPositions(playersData);
-
-    // Display simple message instead of raw JSON
-    document.getElementById("dice-result").innerText =
-      "Game initialized. Roll the dice to begin!";
-  } catch (error) {
-    console.error("Error initializing game:", error);
-  }
-}
-
-async function restart() {
-  try {
-    const response = await fetch("/restartGame", {
-      method: "GET",
-      headers: { Accept: "application/json" },
-    });
-    const playersData = await response.json();
-    updatePlayerPositions(playersData);
-
-    // Display simple message instead of raw JSON
-    document.getElementById("dice-result").innerText =
-      "Game initialized. Roll the dice to begin!";
-  } catch (error) {
-    console.error("Error initializing game:", error);
-  }
-}
 
 function updatePlayerPositions(playersData) {
   clearBoardPawn();
 
   const colorMap = {
-    1: "red",
-    2: "blue",
-    3: "green",
-    4: "yellow",
+    1: "Red",
+    2: "Blue",
+    3: "Green",
+    4: "Yellow",
   };
 
   // Ensure playersData is an array
