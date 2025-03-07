@@ -6,17 +6,17 @@
       "pawns": [
         {
           "PawnId": 1,
-          "initialX": 0,
+          "initialX": 15,
           "initialY": 0,
           "color": "Red",
-          "state": "Start"
+          "state": "Normal"
         },
         {
           "PawnId": 2,
-          "initialX": 0,
+          "initialX": 18,
           "initialY": 0,
           "color": "Red",
-          "state": "Start"
+          "state": "Normal"
         },
         {
           "PawnId": 3,
@@ -40,10 +40,10 @@
       "pawns": [
         {
           "PawnId": 1,
-          "initialX": 0,
+          "initialX": 2,
           "initialY": 0,
           "color": "Blue",
-          "state": "Start"
+          "state": "Normal"
         },
         {
           "PawnId": 2,
@@ -54,10 +54,10 @@
         },
         {
           "PawnId": 3,
-          "initialX": 0,
+          "initialX": 14,
           "initialY": 0,
           "color": "Blue",
-          "state": "Start"
+          "state": "Normal"
         },
         {
           "PawnId": 4,
@@ -74,10 +74,10 @@
       "pawns": [
         {
           "PawnId": 1,
-          "initialX": 0,
+          "initialX": 7,
           "initialY": 0,
           "color": "Green",
-          "state": "Start"
+          "state": "Normal"
         },
         {
           "PawnId": 2,
@@ -95,10 +95,10 @@
         },
         {
           "PawnId": 4,
-          "initialX": 0,
+          "initialX": 11,
           "initialY": 0,
           "color": "Green",
-          "state": "Start"
+          "state": "Normal"
         }
       ]
     },
@@ -108,10 +108,10 @@
       "pawns": [
         {
           "PawnId": 1,
-          "initialX": 0,
+          "initialX": 5,
           "initialY": 0,
           "color": "Yellow",
-          "state": "Start"
+          "state": "Normal"
         },
         {
           "PawnId": 2,
@@ -122,10 +122,10 @@
         },
         {
           "PawnId": 3,
-          "initialX": 0,
+          "initialX": 3,
           "initialY": 0,
           "color": "Yellow",
-          "state": "Start"
+          "state": "Normal"
         },
         {
           "PawnId": 4,

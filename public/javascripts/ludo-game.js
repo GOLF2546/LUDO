@@ -2,7 +2,7 @@
 let diceValue = 0;
 
 // Navigation function
-function startGame() {
+function startGamePage() {
   window.location.href = '/start';
 }
 
@@ -33,6 +33,184 @@ async function rollDice() {
   }
 }
 
+async function selectPawn(playerId, color, pawnId) {
+  if (!pawnId) {
+    console.error("Pawn ID is missing!");
+    alert("Error: Pawn ID is missing.");
+    return;
+  }
+
+  if (diceValue === 0) {
+    alert("You must roll the dice first!");
+    return;
+  }
+
+  const payload = {
+    pawnId: pawnId, // ✅ Ensure pawnId is included
+    color: color,
+    diceValue: diceValue,
+  };
+
+  console.log("Sending payload:", payload); // Debugging
+
+  try {
+    const response = await fetch("/handleGameClick", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+
+    const updatedPlayer = await response.json();
+    console.log("Player updated:", updatedPlayer);
+
+    // Update the UI
+    updatePlayerPositions(updatedPlayer);
+  } catch (error) {
+    console.error("Error handling pawn click:", error);
+    alert("Failed to move the pawn. Please try again.");
+  }
+}
+
+
+async function startGame() {
+  try {
+    const response = await fetch("/startGame", {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+    const gameState = await response.json();
+    const players = gameState.players;
+
+    // Clear existing pawns from the board
+    clearBoardPawn();
+
+    // Place each pawn on the board based on its position
+    players.forEach((player) => {
+      player.pawns.forEach((pawn) => {
+        const cellId = pawn.initialX.toString(); // Assuming initialX is the cell ID
+        renderPawnOnBoard(cellId, player.id, player.color.toLowerCase(), pawn.PawnId, pawn.state);
+      });
+    });
+
+    // Generate player details for display
+    let playerDetails = players
+      .map((player) => {
+        let pawnImages = player.pawns
+          .map((p) => {
+            // Render the pawn images dynamically
+            return renderPawnImage(player.id, player.color, p.PawnId);
+          })
+          .join(" ");
+
+        return `Player ${player.id} (${player.color}): ${pawnImages}`;
+      })
+      .join("<br>");
+
+    document.getElementById("game-players").innerHTML = playerDetails;
+  } catch (error) {
+    console.error("Error starting game:", error);
+    document.getElementById("game-players").innerText =
+      "Failed to start the game.";
+  }
+}
+function renderPawnOnBoard(cellId, playerId, color, pawnId, state) {
+  placePawnOnBoard(cellId, playerId, color, pawnId, state);
+}
+function renderPawnImage(playerId, color, pawnId) {
+  if (!pawnId) {
+    console.error("Pawn ID is missing in renderPawnImage!");
+  }
+  
+  const imagePath = `/assets/images/components/pawn/${color.charAt(0).toLowerCase()}.png`;
+  return `<img src="${imagePath}" alt="${color} pawn" onclick="selectPawn(${playerId}, '${color}', ${pawnId})">`;
+}
+
+function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
+  if (!pawnId) {
+    console.error("❌ Missing pawnId in placePawnOnBoard! Check updatePlayerPositions.", {
+      cellId, playerId, color, state
+    });
+    return;
+  }
+
+  const cell = document.getElementById(cellId);
+  if (cell) {
+    const pawn = document.createElement("div");
+    pawn.id = `player-${playerId}-pawn-${pawnId}`;
+    pawn.className = `${color}-pawn`;
+
+    const imagePath = `/assets/images/components/pawn/${color.charAt(0)}.png`;
+    pawn.style.backgroundImage = `url('${imagePath}')`;
+    pawn.style.backgroundSize = "contain";
+    pawn.style.backgroundRepeat = "no-repeat";
+    pawn.style.backgroundPosition = "center";
+
+    pawn.onclick = () => selectPawn(playerId, color, pawnId);
+
+    if (state === "End") {
+      pawn.style.position = "absolute";
+      pawn.style.width = "25%";
+      pawn.style.height = "25%";
+
+      switch (color) {
+        case "red":
+          pawn.style.bottom = "0";
+          pawn.style.left = "50%";
+          pawn.style.transform = "translateX(-50%)";
+          break;
+        case "green":
+          pawn.style.top = "50%";
+          pawn.style.left = "0";
+          pawn.style.transform = "translateY(-50%)";
+          break;
+        case "yellow":
+          pawn.style.top = "0";
+          pawn.style.left = "50%";
+          pawn.style.transform = "translateX(-50%)";
+          break;
+        case "blue":
+          pawn.style.top = "50%";
+          pawn.style.right = "0";
+          pawn.style.transform = "translateY(-50%)";
+          break;
+      }
+    } else {
+      pawn.style.width = "80%";
+      pawn.style.height = "80%";
+      pawn.style.borderRadius = "50%";
+      pawn.style.margin = "auto";
+    }
+
+    cell.appendChild(pawn);
+  } else {
+    console.error(`❌ Cell with ID ${cellId} not found!`);
+  }
+}
+
+
+
+function clearBoardPawn() {
+  const pathSquares = document.querySelectorAll(".path-square");
+  pathSquares.forEach((square) => {
+    // Remove pawn elements but keep the square itself
+    const pawns = square.querySelectorAll(".pawn");
+    pawns.forEach((pawn) => pawn.remove());
+  });
+
+  // Clear center star positions
+  const centerPositions = ["Y6", "B6", "G6", "R6"];
+  centerPositions.forEach((id) => {
+    const element = document.getElementById(id);
+    if (element) element.innerHTML = "";
+  });
+}
+
 async function initializeGame() {
   try {
     const response = await fetch("/startGame", {
@@ -51,12 +229,13 @@ async function initializeGame() {
     console.error("Error initializing game:", error);
   }
 }
-async function restart(params) {
+async function restart() {
   try{
-    const response = await fetch("/restart", {
+    const response = await fetch("/restartGame", {
       method: "GET",
       headers: { Accept: "application/json" },
     });
+    const playersData = await response.json();
     updatePlayerPositions(playersData);
 
     // Display simple message instead of raw JSON
@@ -81,103 +260,35 @@ function updatePlayerPositions(playersData) {
     const playerId = player.id;
     const color = colorMap[playerId];
 
-    // Process each pawn for this player
     player.pawns.forEach((pawn, pawnIndex) => {
-      const pawnId = `${color}-pawn-${pawnIndex}`;
-
-      if (pawn.state === "Start") {
-        // Pawn is in home base - nothing to do as they're rendered by the server template
-      } else if (pawn.state === "Normal") {
-        // Pawn is on the board at a specific position
-        const cellId = pawn.initialX.toString();
-        if (cellId) {
-          placePawnOnBoard(cellId, color, pawnId, pawn.state);
-        }
+      console.log("🔍 Checking pawn data:", pawn); // ✅ Debugging log
+    
+      if (!pawn.PawnId) {
+        console.error("❌ Error: Pawn ID is missing in player data!", pawn);
+        return;
+      }
+    
+      const pawnId = pawn.PawnId; // ✅ Ensure pawnId is correctly assigned
+      const cellId = pawn.initialX ? pawn.initialX.toString() : null;
+    
+      if (pawn.state === "Normal" && cellId) {
+        placePawnOnBoard(cellId, playerId, color, pawnId, pawn.state);
       } else if (pawn.state === "End") {
-        // Pawn has reached the end (could place in center or finish area)
-        // For now, we'll place it in the center
         placePawnOnBoard(
           `${color.charAt(0).toUpperCase()}6`,
+          playerId,
           color,
           pawnId,
           pawn.state
         );
       }
     });
+    
   });
 }
 
-function clearBoardPawn() {
-  const pathSquares = document.querySelectorAll(".path-square");
-  pathSquares.forEach((square) => {
-    // Remove pawn elements but keep the square itself
-    const pawns = square.querySelectorAll(".pawn");
-    pawns.forEach((pawn) => pawn.remove());
-  });
 
-  // Clear center star positions
-  const centerPositions = ["Y6", "B6", "G6", "R6"];
-  centerPositions.forEach((id) => {
-    const element = document.getElementById(id);
-    if (element) element.innerHTML = "";
-  });
-}
 
-function placePawnOnBoard(cellId, color, pawnId, state) {
-  const cell = document.getElementById(cellId);
-  if (cell) {
-    const pawn = document.createElement("div");
-    pawn.id = pawnId;
-    pawn.className = `${color}-pawn`;
-
-    // Set the background image
-    const imagePath = `/assets/images/components/pawn/${color.charAt(0)}.png`;
-    pawn.style.backgroundImage = `url('${imagePath}')`;
-    pawn.style.backgroundSize = "contain";
-    pawn.style.backgroundRepeat = "no-repeat";
-    pawn.style.backgroundPosition = "center";
-
-    if (state === "End") {
-      // Set absolute positioning inside the center-star
-      pawn.style.position = "absolute";
-      pawn.style.width = "25%";
-      pawn.style.height = "25%";
-
-      // Adjust placement based on color
-      switch (color) {
-        case "red":
-          pawn.style.bottom = "0";
-          pawn.style.left = "50%";
-          pawn.style.transform = "translateX(-50%)";
-          break;
-        case "green":
-          pawn.style.top = "50%";
-          pawn.style.left = "0";
-          pawn.style.transform = "translateY(-50%)";
-          break;
-        case "yellow":
-          pawn.style.top = "0";
-          pawn.style.left = "50%";
-          pawn.style.transform = "translateX(-50%)";
-          break;
-        case "blue":
-          pawn.style.top = "50%";
-          pawn.style.right = "0";
-          pawn.style.transform = "translateY(-50%)";
-          break;
-      }
-    } else {
-      // Normal and Start: Full size, centered
-      pawn.style.width = "80%";
-      pawn.style.height = "80%";
-      pawn.style.borderRadius = "50%";
-      pawn.style.margin = "auto";
-    }
-
-    // Append pawn to the cell
-    cell.appendChild(pawn);
-  }
-}
 
 // Auto-initialization when DOM content is loaded
 document.addEventListener("DOMContentLoaded", initializeGame);
