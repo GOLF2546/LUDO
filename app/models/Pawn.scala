@@ -18,10 +18,10 @@ object PawnFunctions {
 
   val setPosition: (Color) => (Int) = (color) => {
     color match {
-      case Color.Blue   => (0) // Blue pawns start at (0, 0)
-      case Color.Red    => (13) // Red pawns start at (13, 0)
-      case Color.Green  => (26) // Green pawns start at (26, 0)
-      case Color.Yellow => (39) // Yellow pawns start at (39, 0)
+      case Color.Blue   => (27) // Blue pawns start at (0, 0)
+      case Color.Red    => (40) // Red pawns start at (13, 0)
+      case Color.Green  => (1) // Green pawns start at (26, 0)
+      case Color.Yellow => (14) // Yellow pawns start at (39, 0)
     }
   }
 
@@ -35,14 +35,13 @@ object PawnFunctions {
         s"new Y is ${newY}, initialY is ${pawn.initialY}, and step is ${steps}"
       )
 
-      // Compute newX and state based on the current state and newY
       val (newX, newState) = (pawn.state, newY) match {
         case (PawnState.Start, y) if y == 6 =>
           println("Pawn is in Start state, moving to Normal state")
           (setPosition(pawn.color), PawnState.Normal)
 
-        case (PawnState.Normal, y) if y > 10 =>
-          val nextX = newY - 10
+        case (PawnState.Normal, y) if y > 56 =>
+          val nextX = newY - 56
           println("Pawn is in Normal state, moving to the Finish line.")
           (nextX, PawnState.Finish)
 
@@ -70,7 +69,7 @@ object PawnFunctions {
           }
 
         case _ =>
-          val nextX = pawn.initialX + steps
+          val nextX = (pawn.initialX + steps)%52
           println("No specific match, moving pawn normally.")
           (nextX, pawn.state)
       }
