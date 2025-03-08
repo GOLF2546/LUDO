@@ -75,17 +75,16 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     background-color: #F5F5DC;
+    position: relative;
     width: 80%;
     height: 80%;
     margin: 10%;
 }
-
-.pawn-home {
+.pawn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
+    margin: auto;
 }
 
 /* Path squares */
@@ -113,7 +112,7 @@
 
 .center-star {
     position: relative;
-    width: 100%; 
+    width: 100%;
     height: 100%;
     display: grid;
 }
@@ -159,3 +158,4 @@
 .path-blue {
     background-color: #6D9DC5;
 }
+

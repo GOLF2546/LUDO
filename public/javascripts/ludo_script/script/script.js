@@ -180,7 +180,6 @@ function updatePlayerPositions(playersData) {
     4: "Red",
   };
 
-  // Ensure playersData is an array
   const playersArray = Array.isArray(playersData) ? playersData : [playersData];
 
   playersArray.forEach((player) => {
@@ -188,17 +187,25 @@ function updatePlayerPositions(playersData) {
     const color = colorMap[playerId];
 
     player.pawns.forEach((pawn, pawnIndex) => {
-      console.log("🔍 Checking pawn data:", pawn); // ✅ Debugging log
+      console.log("🔍 Checking pawn data:", pawn);
 
       if (!pawn.PawnId) {
         console.error("❌ Error: Pawn ID is missing in player data!", pawn);
         return;
       }
 
-      const pawnId = pawn.PawnId; // ✅ Ensure pawnId is correctly assigned
+      const pawnId = pawn.PawnId;
       const cellId = pawn.initialX ? pawn.initialX.toString() : null;
 
-      if (pawn.state === "Normal" && cellId) {
+      if (pawn.state === "Start") {
+        const homeSquare = document.querySelector(
+          `.home-base-${color.toLowerCase()} .home-square`
+        );
+        if (homeSquare) {
+          const pawnElement = createPawnElement(playerId, color, pawnId, pawn.state);
+          homeSquare.appendChild(pawnElement);
+        }
+      } else if (pawn.state === "Normal" && cellId) {
         placePawnOnBoard(cellId, playerId, color, pawnId, pawn.state);
       } else if (pawn.state === "Finish") {
         placePawnOnBoard(
@@ -208,8 +215,7 @@ function updatePlayerPositions(playersData) {
           pawnId,
           pawn.state
         );
-      } 
-      else if (pawn.state === "End") {
+      } else if (pawn.state === "End") {
         placePawnOnBoard(
           `${color.charAt(0).toUpperCase()}6`,
           playerId,
@@ -220,6 +226,16 @@ function updatePlayerPositions(playersData) {
       }
     });
   });
+}
+
+function createPawnElement(playerId, color, pawnId, state) {
+  const pawnElement = document.createElement("img");
+  pawnElement.src = `/assets/images/components/pawn/${color.charAt(0)}.png`;
+  pawnElement.alt = `${color} pawn`;
+  pawnElement.classList.add("pawn");
+  pawnElement.dataset.pawnId = pawnId;
+  pawnElement.dataset.state = state;
+  return pawnElement;
 }
 
 export { rollDice, initializeGame };
