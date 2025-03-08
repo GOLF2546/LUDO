@@ -1,20 +1,5 @@
-// Dice value state
 let diceValue = 0;
 
-// Navigation function
-function startGamePage() {
-  window.location.href = '/start';
-}
-
-function home() {
-  window.location.href = "/";
-}
-
-function howTo() {
-  window.location.href = "/howTo";
-}
-
-// Function to roll the dice and display the result
 async function rollDice() {
   try {
     const response = await fetch("/rollDice", {
@@ -52,53 +37,10 @@ async function initializeGame() {
   }
 }
 
-async function restart() {
-  try {
-    const response = await fetch("/restartGame", {
-      method: "GET",
-      headers: { Accept: "application/json" },
-    });
-    const playersData = await response.json();
-    updatePlayerPositions(playersData);
-
-    // Display simple message instead of raw JSON
-    document.getElementById("dice-result").innerText =
-      "Game initialized. Roll the dice to begin!";
-  } catch (error) {
-    console.error("Error initializing game:", error);
-  }
-}
-async function startGame() {
-  try {
-    const response = await fetch("/startGame", {
-      method: "GET",
-      headers: { Accept: "application/json" },
-    });
-    const gameState = await response.json();
-    const players = gameState.players;
-
-    // Clear existing pawns from the board
-    clearBoardPawn();
-
-    // Place each pawn on the board based on its position
-    players.forEach((player) => {
-      console.log(`DEBUG: Processing player with color=${player.color}`); // Debugging
-      player.pawns.forEach((pawn) => {
-        const cellId = pawn.initialX.toString(); // Assuming initialX is the cell ID
-        placePawnOnBoard(cellId, player.id, player.color, pawn.PawnId, pawn.state);
-      });
-    });
-
-    document.getElementById("game-players").innerHTML = playerDetails;
-  } catch (error) {
-    console.error("Error starting game:", error);
-    document.getElementById("game-players").innerText =
-      "Failed to start the game.";
-  }
-}
-
 async function selectPawn(playerId, color, pawnId) {
-  console.log(`DEBUG: selectPawn called with color=${color}, playerId=${playerId}, pawnId=${pawnId}`); // Debugging
+  console.log(
+    `DEBUG: selectPawn called with color=${color}, playerId=${playerId}, pawnId=${pawnId}`
+  ); // Debugging
 
   if (!pawnId) {
     console.error("Pawn ID is missing!");
@@ -148,15 +90,6 @@ async function selectPawn(playerId, color, pawnId) {
 }
 
 function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
-  console.log(`DEBUG: placePawnOnBoard called with color=${color}`); // Debugging
-
-  if (!pawnId) {
-    console.error("❌ Missing pawnId in placePawnOnBoard! Check updatePlayerPositions.", {
-      cellId, playerId, color, state
-    });
-    return;
-  }
-
   const cell = document.getElementById(cellId);
   if (cell) {
     const pawn = document.createElement("div");
@@ -227,8 +160,6 @@ function clearBoardPawn() {
   });
 }
 
-
-
 function updatePlayerPositions(playersData) {
   clearBoardPawn();
 
@@ -248,15 +179,15 @@ function updatePlayerPositions(playersData) {
 
     player.pawns.forEach((pawn, pawnIndex) => {
       console.log("🔍 Checking pawn data:", pawn); // ✅ Debugging log
-    
+
       if (!pawn.PawnId) {
         console.error("❌ Error: Pawn ID is missing in player data!", pawn);
         return;
       }
-    
+
       const pawnId = pawn.PawnId; // ✅ Ensure pawnId is correctly assigned
       const cellId = pawn.initialX ? pawn.initialX.toString() : null;
-    
+
       if (pawn.state === "Normal" && cellId) {
         placePawnOnBoard(cellId, playerId, color, pawnId, pawn.state);
       } else if (pawn.state === "End") {
@@ -271,5 +202,5 @@ function updatePlayerPositions(playersData) {
     });
   });
 }
-// Auto-initialization when DOM content is loaded
-document.addEventListener("DOMContentLoaded", initializeGame);
+
+export { rollDice, initializeGame };

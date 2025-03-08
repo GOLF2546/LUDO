@@ -4,7 +4,7 @@
     <div id="dice-result" style="font-size: 20px; margin: 20px 0" class="flex">
       Click the button to roll the dice!
     </div>
-    <div><button onclick="rollDice()">🎲 Roll Dice</button></div>
+    <div><button class="roll-btn">🎲 Roll Dice</button></div>
   </div>
  
   
@@ -44,9 +44,8 @@
     </div>
   </div>
   <div class="button-container3">
-    <img src="@routes.Assets.versioned("images/components/button/homegamepage.png")" alt="home page" class="home-btn"
-      onclick="home()">
+    <img src="@routes.Assets.versioned("images/components/button/homegamepage.png")" alt="home page" class="home-btn">
   </div>
 </div>
-<script src="@routes.Assets.versioned("javascripts/ludo-game.js")"></script>
+<script src="@routes.Assets.versioned("javascripts/ludo_script/gamepage.js")" type="module"></script>
 }
