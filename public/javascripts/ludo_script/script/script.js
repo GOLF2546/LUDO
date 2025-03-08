@@ -110,22 +110,22 @@ function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
       pawn.style.height = "25%";
 
       switch (color) {
-        case "red":
+        case "Red":
           pawn.style.bottom = "0";
           pawn.style.left = "50%";
           pawn.style.transform = "translateX(-50%)";
           break;
-        case "green":
+        case "Green":
           pawn.style.top = "50%";
           pawn.style.left = "0";
           pawn.style.transform = "translateY(-50%)";
           break;
-        case "yellow":
+        case "Yellow":
           pawn.style.top = "0";
           pawn.style.left = "50%";
           pawn.style.transform = "translateX(-50%)";
           break;
-        case "blue":
+        case "Blue":
           pawn.style.top = "50%";
           pawn.style.right = "0";
           pawn.style.transform = "translateY(-50%)";
