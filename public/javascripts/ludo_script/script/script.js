@@ -9,9 +9,19 @@ async function rollDice() {
         Accept: "application/json",
       },
     });
+
     const result = await response.json();
     diceValue = result;
-    document.getElementById("dice-result").innerText = "Dice Roll: " + result;
+
+    document.getElementById("dice-result").innerText =
+      "Dice Roll: " + diceValue;
+
+    // Update the dice image
+    const diceButton = document.querySelector(".roll-btn");
+    if (diceButton) {
+      diceButton.src = `/assets/images/components/dice/${diceValue}.png`;
+      diceButton.alt = `Dice showing ${diceValue}`;
+    }
   } catch (error) {
     console.error("Error rolling dice:", error);
     document.getElementById("dice-result").innerText =
@@ -26,17 +36,15 @@ async function initializeGame() {
       headers: { Accept: "application/json" },
     });
     const playersData = await response.json();
-
-    // Update player positions based on data
     updatePlayerPositions(playersData.players);
     playerTurn = playersData.turn;
 
-    // Display simple message instead of raw JSON
-    document.getElementById("dice-result").innerText =
-      "Game initialized. Roll the dice to begin!" +
-      " Player " +
-      playerTurn +
-      " turn";
+    let diceValue = 0;
+    const rollButton = document.querySelector(".roll-btn");
+    if (rollButton) {
+      const diceElement = createDiceButton(playerTurn, diceValue);
+      rollButton.replaceWith(diceElement);
+    }
   } catch (error) {
     console.error("Error initializing game:", error);
   }
@@ -151,6 +159,7 @@ function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
 }
 
 function clearBoardPawn() {
+  // Clear path squares
   const pathSquares = document.querySelectorAll(".path-square");
   pathSquares.forEach((square) => {
     // Remove all pawn elements (with any color)
@@ -167,6 +176,14 @@ function clearBoardPawn() {
       const pawns = element.querySelectorAll("[class$='-pawn']");
       pawns.forEach((pawn) => pawn.remove());
     }
+  });
+  
+  // Clear home squares
+  const homeSquares = document.querySelectorAll(".home-square");
+  homeSquares.forEach((square) => {
+    // Remove all pawns from home squares
+    const pawns = square.querySelectorAll(".pawn");
+    pawns.forEach((pawn) => pawn.remove());
   });
 }
 
@@ -202,7 +219,12 @@ function updatePlayerPositions(playersData) {
           `.home-base-${color.toLowerCase()} .home-square`
         );
         if (homeSquare) {
-          const pawnElement = createPawnElement(playerId, color, pawnId, pawn.state);
+          const pawnElement = createPawnElement(
+            playerId,
+            color,
+            pawnId,
+            pawn.state
+          );
           homeSquare.appendChild(pawnElement);
         }
       } else if (pawn.state === "Normal" && cellId) {
@@ -228,6 +250,38 @@ function updatePlayerPositions(playersData) {
   });
 }
 
+function createDiceButton(playerTurn, diceValue) {
+  const diceButton = document.createElement("img");
+  diceButton.src = `/assets/images/components/dice/${diceValue}.png`;
+  diceButton.alt = `Dice showing ${diceValue}`;
+  diceButton.classList.add("roll-btn");
+  diceButton.style.cursor = "pointer";
+  diceButton.style.position = "absolute";
+
+  switch (playerTurn) {
+    case 0:
+      diceButton.style.top = "10px";
+      diceButton.style.left = "10px";
+      break;
+    case 1:
+      diceButton.style.top = "10px";
+      diceButton.style.right = "10px";
+      break;
+    case 2:
+      diceButton.style.bottom = "10px";
+      diceButton.style.right = "10px";
+      break;
+    case 3:
+      diceButton.style.bottom = "10px";
+      diceButton.style.left = "10px";
+      break;
+  }
+
+  diceButton.addEventListener("click", rollDice);
+
+  return diceButton;
+}
+
 function createPawnElement(playerId, color, pawnId, state) {
   const pawnElement = document.createElement("img");
   pawnElement.src = `/assets/images/components/pawn/${color.charAt(0)}.png`;
@@ -235,6 +289,9 @@ function createPawnElement(playerId, color, pawnId, state) {
   pawnElement.classList.add("pawn");
   pawnElement.dataset.pawnId = pawnId;
   pawnElement.dataset.state = state;
+  pawnElement.style.cursor = "pointer";
+  pawnElement.onclick = () => selectPawn(playerId, color, pawnId);
+  
   return pawnElement;
 }
 

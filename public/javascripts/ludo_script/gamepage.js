@@ -6,7 +6,4 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".home-btn").addEventListener("click", () => {
     home();
   });
-  document.querySelector(".roll-btn").addEventListener("click", () => {
-    rollDice();
-  });
 });
