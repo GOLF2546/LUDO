@@ -89,9 +89,7 @@ object PawnFunctions {
           println(
             s"(0, 0) Pawn ${pawn.PawnId} ${pawn.color} is being reset to the Start state."
           )
-          pawn.copy(state =
-            PawnState.Start
-          ) // Create a new Pawn with the updated state
+          pawn.copy(initialX = 0, initialY = 0, state = PawnState.Start) // Create a new Pawn with the updated state
         } else {
           pawn // Keep the original Pawn unchanged
         }

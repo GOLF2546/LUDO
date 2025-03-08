@@ -106,6 +106,7 @@ async function selectPawn(playerId, color, pawnId) {
 function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
   const cell = document.getElementById(cellId);
   if (cell) {
+    
     const pawn = document.createElement("div");
     pawn.id = `player-${playerId}-pawn-${pawnId}`;
     pawn.className = `${color}-pawn`;
