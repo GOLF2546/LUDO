@@ -32,27 +32,49 @@ object PawnFunctions {
     (pawn, steps, otherPawns) => {
       val newY = pawn.initialY + steps
       println(
-        s"new Y is ${newY} initialy is ${pawn.initialY} and step is ${steps}"
+        s"new Y is ${newY}, initialY is ${pawn.initialY}, and step is ${steps}"
       )
+
       // Compute newX and state based on the current state and newY
       val (newX, newState) = (pawn.state, newY) match {
         case (PawnState.Start, y) if y == 6 =>
-          println("Pawn is in Start state, moving to normal statr")
+          println("Pawn is in Start state, moving to Normal state")
           (setPosition(pawn.color), PawnState.Normal)
+
         case (PawnState.Normal, y) if y > 10 =>
           val nextX = newY - 10
-          println("Pawn is in Normal state, moving to the finish line.")
+          println("Pawn is in Normal state, moving to the Finish line.")
           (nextX, PawnState.Finish)
 
-        case (PawnState.Finish, y) if y >= 5 =>
-          println("Pawn has reached the End state.")
-          (0, PawnState.End)
+        case (PawnState.Finish, y) =>
+          // Calculate position in the final stretch (color[0]1 through color[0]6)
+          val colorPrefix = pawn.color match {
+            case Color.Blue   => "B"
+            case Color.Red    => "R"
+            case Color.Green  => "G"
+            case Color.Yellow => "Y"
+          }
+
+          // The position in the final stretch (starts at 1, ends at 6)
+          val finalPosition =
+            y - 10 // Adjust this calculation based on your game mechanics
+
+          if (finalPosition >= 6) {
+            println("Pawn has reached the End state.")
+            (0, PawnState.End)
+          } else {
+            println(
+              s"Pawn is moving to ${colorPrefix}${finalPosition} in the final stretch."
+            )
+            (finalPosition, PawnState.Finish)
+          }
 
         case _ =>
           val nextX = pawn.initialX + steps
           println("No specific match, moving pawn normally.")
           (nextX, pawn.state)
       }
+
       // Perform position check
       checkPosition(newX, newState, otherPawns)
 
@@ -76,7 +98,6 @@ object PawnFunctions {
         }
       }
     }
-
 
   val isPawnAtStart: Pawn => Boolean = pawn =>
     // pawn.initialX == 0 &&

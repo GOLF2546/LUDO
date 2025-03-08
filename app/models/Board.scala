@@ -75,7 +75,7 @@ val playGame: (GameState, Int, Int) => GameState =
 
   val dice: () => Int = () => scala.util.Random.nextInt(6) + 1
   def createInitialPlayers(): List[Player] = {
-    val playerColors = List(Color.Red, Color.Blue, Color.Green, Color.Yellow)
+    val playerColors = List(Color.Green, Color.Yellow, Color.Blue, Color.Red)
     (1 to 4).toList.zip(playerColors).map { case (id, color) =>
       Player(
         id,

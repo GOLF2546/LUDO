@@ -42,38 +42,20 @@ body.game-page {
 }
 
 .button-container {
+  height: 650px;
   position: absolute;
-  bottom: 10%;
+  bottom: 15%;
   right: 10%;
   display: flex;
   flex-direction: column;
-  gap: 100px;
+  gap: 30px;
   align-items: center;
 }
 
-.start-btn {
+.new-game-btn, .continue-btn, .how-to-btn {
   cursor: pointer;
   max-width: 270px;
-  width: 100%;
-  height: auto;
-}
-.restart-btn {
-  cursor: pointer;
-  max-width: 270px;
-  width: 100%;
-  height: auto;
-}
-.continue-btn {
-  cursor: pointer;
-  max-width: 270px;
-  width: 100%;
-  height: auto;
-}
-.how-to-btn {
-  cursor: pointer;
-  max-width: 400px;
-  width: 100%;
-  height: auto;
+  height: 200px;
 }
 
 .button-container2 {

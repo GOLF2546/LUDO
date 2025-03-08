@@ -1,4 +1,5 @@
 let diceValue = 0;
+let playerTurn = 0;
 
 async function rollDice() {
   try {
@@ -27,11 +28,15 @@ async function initializeGame() {
     const playersData = await response.json();
 
     // Update player positions based on data
-    updatePlayerPositions(playersData);
+    updatePlayerPositions(playersData.players);
+    playerTurn = playersData.turn;
 
     // Display simple message instead of raw JSON
     document.getElementById("dice-result").innerText =
-      "Game initialized. Roll the dice to begin!";
+      "Game initialized. Roll the dice to begin!" +
+      " Player " +
+      playerTurn +
+      " turn";
   } catch (error) {
     console.error("Error initializing game:", error);
   }
@@ -83,6 +88,7 @@ async function selectPawn(playerId, color, pawnId) {
 
     // Update the UI
     updatePlayerPositions(updatedPlayer);
+    await initializeGame();
   } catch (error) {
     console.error("Error handling pawn click:", error);
     alert("Failed to move the pawn. Please try again.");
@@ -147,8 +153,8 @@ function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
 function clearBoardPawn() {
   const pathSquares = document.querySelectorAll(".path-square");
   pathSquares.forEach((square) => {
-    // Remove pawn elements but keep the square itself
-    const pawns = square.querySelectorAll(".pawn");
+    // Remove all pawn elements (with any color)
+    const pawns = square.querySelectorAll("[class$='-pawn']");
     pawns.forEach((pawn) => pawn.remove());
   });
 
@@ -156,7 +162,11 @@ function clearBoardPawn() {
   const centerPositions = ["Y6", "B6", "G6", "R6"];
   centerPositions.forEach((id) => {
     const element = document.getElementById(id);
-    if (element) element.innerHTML = "";
+    if (element) {
+      // Clear all pawns from center positions
+      const pawns = element.querySelectorAll("[class$='-pawn']");
+      pawns.forEach((pawn) => pawn.remove());
+    }
   });
 }
 
@@ -164,10 +174,10 @@ function updatePlayerPositions(playersData) {
   clearBoardPawn();
 
   const colorMap = {
-    1: "Red",
-    2: "Blue",
-    3: "Green",
-    4: "Yellow",
+    1: "Green",
+    2: "Yellow",
+    3: "Blue",
+    4: "Red",
   };
 
   // Ensure playersData is an array
@@ -190,7 +200,16 @@ function updatePlayerPositions(playersData) {
 
       if (pawn.state === "Normal" && cellId) {
         placePawnOnBoard(cellId, playerId, color, pawnId, pawn.state);
-      } else if (pawn.state === "End") {
+      } else if (pawn.state === "Finish") {
+        placePawnOnBoard(
+          `${color.charAt(0).toUpperCase()}${pawn.initialX}`,
+          playerId,
+          color,
+          pawnId,
+          pawn.state
+        );
+      } 
+      else if (pawn.state === "End") {
         placePawnOnBoard(
           `${color.charAt(0).toUpperCase()}6`,
           playerId,

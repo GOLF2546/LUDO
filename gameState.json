@@ -2,136 +2,136 @@
   "players": [
     {
       "id": 1,
-      "color": "Red",
+      "color": "Green",
       "pawns": [
         {
           "PawnId": 1,
-          "initialX": 15,
-          "initialY": 0,
-          "color": "Red",
-          "state": "Normal"
+          "initialX": 0,
+          "initialY": 21,
+          "color": "Green",
+          "state": "End"
         },
         {
           "PawnId": 2,
           "initialX": 12,
           "initialY": 0,
-          "color": "Red",
+          "color": "Green",
           "state": "Normal"
         },
         {
           "PawnId": 3,
           "initialX": 1,
           "initialY": 0,
-          "color": "Red",
+          "color": "Green",
           "state": "Normal"
         },
         {
           "PawnId": 4,
           "initialX": 5,
           "initialY": 0,
-          "color": "Red",
+          "color": "Green",
           "state": "Normal"
         }
       ]
     },
     {
       "id": 2,
-      "color": "Blue",
+      "color": "Yellow",
       "pawns": [
         {
           "PawnId": 1,
-          "initialX": 3,
-          "initialY": 13,
-          "color": "Blue",
+          "initialX": 9,
+          "initialY": 19,
+          "color": "Yellow",
           "state": "End"
         },
         {
           "PawnId": 2,
           "initialX": 0,
           "initialY": 0,
-          "color": "Blue",
+          "color": "Yellow",
           "state": "Start"
         },
         {
           "PawnId": 3,
           "initialX": 0,
           "initialY": 0,
-          "color": "Blue",
+          "color": "Yellow",
           "state": "Start"
         },
         {
           "PawnId": 4,
           "initialX": 0,
           "initialY": 0,
-          "color": "Blue",
+          "color": "Yellow",
           "state": "Start"
         }
       ]
     },
     {
       "id": 3,
-      "color": "Green",
+      "color": "Blue",
       "pawns": [
         {
           "PawnId": 1,
           "initialX": 0,
           "initialY": 0,
-          "color": "Green",
+          "color": "Blue",
           "state": "Start"
         },
         {
           "PawnId": 2,
           "initialX": 0,
           "initialY": 0,
-          "color": "Green",
+          "color": "Blue",
           "state": "Start"
         },
         {
           "PawnId": 3,
           "initialX": 0,
           "initialY": 0,
-          "color": "Green",
+          "color": "Blue",
           "state": "Start"
         },
         {
           "PawnId": 4,
           "initialX": 0,
           "initialY": 0,
-          "color": "Green",
+          "color": "Blue",
           "state": "Start"
         }
       ]
     },
     {
       "id": 4,
-      "color": "Yellow",
+      "color": "Red",
       "pawns": [
         {
           "PawnId": 1,
           "initialX": 0,
           "initialY": 0,
-          "color": "Yellow",
+          "color": "Red",
           "state": "Start"
         },
         {
           "PawnId": 2,
           "initialX": 0,
           "initialY": 0,
-          "color": "Yellow",
+          "color": "Red",
           "state": "Start"
         },
         {
           "PawnId": 3,
           "initialX": 0,
           "initialY": 0,
-          "color": "Yellow",
+          "color": "Red",
           "state": "Start"
         },
         {
           "PawnId": 4,
           "initialX": 0,
           "initialY": 0,
-          "color": "Yellow",
+          "color": "Red",
           "state": "Start"
         }
       ]

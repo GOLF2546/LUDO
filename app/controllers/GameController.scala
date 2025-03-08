@@ -26,14 +26,17 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)
           "id" -> player.id,
           "pawns" -> player.pawns.sortBy(_.PawnId).map { pawn =>
             Json.obj(
-              "PawnId" -> pawn.PawnId, // ✅ Add PawnId
+              "PawnId" -> pawn.PawnId,
               "initialX" -> pawn.initialX,
               "state" -> pawn.state
             )
           }
         )
       }
-      val jsonResponse = Json.toJson(formattedPlayers)
+      val jsonResponse = Json.obj(
+        "players" -> formattedPlayers,
+        "turn" -> gameState.currentPlayerIndex
+      )
       println(s"DEBUG: startGame response - $jsonResponse")
       Ok(jsonResponse)
     } else {
