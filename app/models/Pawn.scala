@@ -28,7 +28,7 @@ object PawnFunctions {
   val getPosition: Pawn => (Int, PawnState) = pawn =>
     (pawn.initialX, pawn.state)
 
-  val move: (Pawn, Int, List[Pawn]) => (Int, Int, PawnState) =
+  val move: (Pawn, Int, List[Pawn]) => (Int, Int, PawnState, List[Pawn]) =
     (pawn, steps, otherPawns) => {
       val newY = pawn.initialY + steps
       println(
@@ -69,20 +69,20 @@ object PawnFunctions {
           }
 
         case _ =>
-          val nextX = (pawn.initialX + steps)%52
+          val nextX = (pawn.initialX + steps) % 52
           println("No specific match, moving pawn normally.")
           (nextX, pawn.state)
       }
 
       // Perform position check
-      checkPosition(newX, newState, otherPawns)
+      val updateOtherPawn = checkPosition(newX, newState, otherPawns)
 
       // Return the new position and state
-      (newX, newY, newState)
+      (newX, newY, newState,updateOtherPawn)
     }
   val checkPosition: (Int, PawnState, List[Pawn]) => List[Pawn] =
     (newX, state, otherPawns) => {
-      otherPawns.map { pawn =>
+      val updatedPawns = otherPawns.map { pawn =>
         if (
           pawn.state == PawnState.Normal && getPosition(pawn) == (newX, state)
         ) {
@@ -96,6 +96,8 @@ object PawnFunctions {
           pawn // Keep the original Pawn unchanged
         }
       }
+      println(s"Updated pawns: $updatedPawns")
+      updatedPawns
     }
 
   val isPawnAtStart: Pawn => Boolean = pawn =>
