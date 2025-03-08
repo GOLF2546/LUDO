@@ -99,7 +99,7 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)
 
     // Create initial players and game state
     val players = Board.createInitialPlayers()
-    val gameState = GameState(players, 1)
+    val gameState = GameState(players, 0)
     saveGameState(gameState)
 
     // Format the players for the response
