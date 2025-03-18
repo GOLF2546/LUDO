@@ -1,4 +1,5 @@
 @main("Ludo Game", "game-page") {
+
 <div class="custom-container flex">
   <div>
     <div id="dice-result" style="font-size: 20px; margin: 20px 0" class="flex">
@@ -22,6 +23,7 @@
       </div>
 
       <div class="path-horizontal">@components.path(18, "Green")</div>
+
 
       <div class="center-star">
         <div id="Y6" class="top-left"></div>
@@ -48,4 +50,5 @@
   </div>
 </div>
 <script src="@routes.Assets.versioned("javascripts/ludo_script/gamepage.js")" type="module"></script>
+
 }

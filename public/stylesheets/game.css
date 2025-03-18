@@ -80,11 +80,13 @@
     height: 80%;
     margin: 10%;
 }
+
 .pawn {
     display: flex;
     align-items: center;
     justify-content: center;
     margin: auto;
+
 }
 
 /* Path squares */

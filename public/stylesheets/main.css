@@ -1,3 +1,4 @@
+
 html,
 body {
   margin: 0;
@@ -5,6 +6,7 @@ body {
   height: 100%;
   overflow: hidden;
 }
+
 
 body.home-page,
 body.how-to-page,
@@ -56,6 +58,7 @@ body.game-page {
   cursor: pointer;
   max-width: 270px;
   height: 200px;
+
 }
 
 .button-container2 {
@@ -89,3 +92,4 @@ body.game-page {
   justify-content: center; /* Add this */
   align-items: center; /* Add this */
 }
+

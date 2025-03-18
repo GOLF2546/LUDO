@@ -46,9 +46,11 @@ object PlayerFunctions {
       .sorted
       .headOption
   }
+
   val getPawnsThatCanMove: Player => List[Pawn] = player =>
     player.pawns.filter(PawnFunctions.isPawnCanMove)
 
   val getPawnsAtStart: Player => List[Pawn] = player =>
     player.pawns.filter(PawnFunctions.isPawnAtStart)
+
 }

@@ -22,6 +22,7 @@ object PawnFunctions {
       case Color.Red    => (40) // Red pawns start at (13, 0)
       case Color.Green  => (1) // Green pawns start at (26, 0)
       case Color.Yellow => (14) // Yellow pawns start at (39, 0)
+
     }
   }
 
@@ -74,7 +75,7 @@ object PawnFunctions {
           (nextX, pawn.state)
       }
 
-      // Perform position check
+      // Perform position chec
       val updateOtherPawn = checkPosition(newX, newState, otherPawns)
 
       // Return the new position and state
@@ -94,6 +95,7 @@ object PawnFunctions {
           pawn // Keep the original Pawn unchanged
         }
       }
+
       println(s"Updated pawns: $updatedPawns")
       updatedPawns
     }

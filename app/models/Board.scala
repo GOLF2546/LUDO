@@ -3,6 +3,7 @@ package models
 import scala.io.StdIn
 import play.api.libs.json._
 import java.io.{File, PrintWriter}
+
 case class GameState(
     players: List[Player],
     currentPlayerIndex: Int
