@@ -20,8 +20,6 @@ async function rollDice() {
     }
   } catch (error) {
     console.error("Error rolling dice:", error);
-    document.getElementById("dice-result").innerText =
-      "Failed to roll the dice.";
   }
 }
 
@@ -46,11 +44,7 @@ async function initializeGame() {
   }
 }
 
-async function selectPawn(playerId, color, pawnId) {
-  console.log(
-    `DEBUG: selectPawn called with color=${color}, playerId=${playerId}, pawnId=${pawnId}`
-  ); // Debugging
-
+async function selectPawn(color, pawnId) {
   if (!pawnId) {
     console.error("Pawn ID is missing!");
     alert("Error: Pawn ID is missing.");
@@ -63,12 +57,10 @@ async function selectPawn(playerId, color, pawnId) {
   }
 
   const payload = {
-    pawnId: pawnId, // ✅ Ensure pawnId is included
+    pawnId: pawnId,
     color: color,
     diceValue: diceValue,
   };
-
-  console.log("Sending payload:", payload); // Debugging
 
   try {
     const response = await fetch("/handleGameClick", {
@@ -85,12 +77,6 @@ async function selectPawn(playerId, color, pawnId) {
     }
 
     const updatedPlayer = await response.json();
-    console.log("Player updated:", updatedPlayer);
-
-    // Debugging: Print the updated player data
-    console.log("DEBUG: updatedPlayer data:", updatedPlayer);
-
-    // Update the UI
     updatePlayerPositions(updatedPlayer);
     await initializeGame();
   } catch (error) {
@@ -113,7 +99,7 @@ function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
     pawn.style.backgroundRepeat = "no-repeat";
     pawn.style.backgroundPosition = "center";
 
-    pawn.onclick = () => selectPawn(playerId, color, pawnId);
+    pawn.onclick = () => selectPawn(color, pawnId);
 
     if (state === "End") {
       pawn.style.position = "absolute";
@@ -281,7 +267,7 @@ function createPawnElement(playerId, color, pawnId, state) {
   pawnElement.dataset.pawnId = pawnId;
   pawnElement.dataset.state = state;
   pawnElement.style.cursor = "pointer";
-  pawnElement.onclick = () => selectPawn(playerId, color, pawnId);
+  pawnElement.onclick = () => selectPawn(color, pawnId);
   
   return pawnElement;
 }

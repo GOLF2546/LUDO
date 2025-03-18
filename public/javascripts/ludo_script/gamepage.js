@@ -1,4 +1,4 @@
-import { rollDice, initializeGame } from "./script/script.js";
+import {  initializeGame } from "./script/script.js";
 import { home } from "./script/navigation.js";
 
 document.addEventListener("DOMContentLoaded", () => {

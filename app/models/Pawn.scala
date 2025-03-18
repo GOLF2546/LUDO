@@ -70,7 +70,10 @@ object PawnFunctions {
           }
 
         case _ =>
-          val nextX = (pawn.initialX + steps) % 52
+          val nextX = (pawn.initialX + steps) match {
+              case x if x > 52 => x - 52
+              case x => x
+            }
           println("No specific match, moving pawn normally.")
           (nextX, pawn.state)
       }
