@@ -45,8 +45,4 @@ object PawnState extends EnumJsonFormat[PawnState] {
   override val values: Map[String, PawnState] = Seq(Start, Finish, End, Normal).map(s => s.name -> s).toMap
 }
 
-// Define implicit JSON formats inside an object
-object EnumFormats {
-  implicit val colorFormat: Format[Color] = Color.format
-  implicit val pawnStateFormat: Format[PawnState] = PawnState.format
-}
+
