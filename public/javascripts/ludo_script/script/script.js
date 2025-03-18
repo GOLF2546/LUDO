@@ -13,10 +13,6 @@ async function rollDice() {
     const result = await response.json();
     diceValue = result;
 
-    document.getElementById("dice-result").innerText =
-      "Dice Roll: " + diceValue;
-
-    // Update the dice image
     const diceButton = document.querySelector(".roll-btn");
     if (diceButton) {
       diceButton.src = `/assets/images/components/dice/${diceValue}.png`;
@@ -160,29 +156,23 @@ function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
 }
 
 function clearBoardPawn() {
-  // Clear path squares
   const pathSquares = document.querySelectorAll(".path-square");
   pathSquares.forEach((square) => {
-    // Remove all pawn elements (with any color)
     const pawns = square.querySelectorAll("[class$='-pawn']");
     pawns.forEach((pawn) => pawn.remove());
   });
 
-  // Clear center star positions
   const centerPositions = ["Y6", "B6", "G6", "R6"];
   centerPositions.forEach((id) => {
     const element = document.getElementById(id);
     if (element) {
-      // Clear all pawns from center positions
       const pawns = element.querySelectorAll("[class$='-pawn']");
       pawns.forEach((pawn) => pawn.remove());
     }
   });
   
-  // Clear home squares
   const homeSquares = document.querySelectorAll(".home-square");
   homeSquares.forEach((square) => {
-    // Remove all pawns from home squares
     const pawns = square.querySelectorAll(".pawn");
     pawns.forEach((pawn) => pawn.remove());
   });
