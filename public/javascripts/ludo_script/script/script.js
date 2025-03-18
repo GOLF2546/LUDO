@@ -80,7 +80,6 @@ async function selectPawn(color, pawnId) {
     updatePlayerPositions(updatedPlayer);
     await initializeGame();
   } catch (error) {
-    console.error("Error handling pawn click:", error);
     alert("Failed to move the pawn. Please try again.");
   }
 }
@@ -197,7 +196,6 @@ function updatePlayerPositions(playersData) {
         );
         if (homeSquare) {
           const pawnElement = createPawnElement(
-            playerId,
             color,
             pawnId,
             pawn.state
@@ -259,7 +257,7 @@ function createDiceButton(playerTurn, diceValue) {
   return diceButton;
 }
 
-function createPawnElement(playerId, color, pawnId, state) {
+function createPawnElement(color, pawnId, state) {
   const pawnElement = document.createElement("img");
   pawnElement.src = `/assets/images/components/pawn/${color.charAt(0)}.png`;
   pawnElement.alt = `${color} pawn`;
