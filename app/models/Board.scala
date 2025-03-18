@@ -35,7 +35,6 @@ val playGame: (GameState, Int, Int) => GameState =
 
         println(s"DEBUG: Updated Player pawns: ${movedPlayer.pawns.map(_.PawnId).mkString(", ")}")
 
-        // Update other players' pawns based on color matching
         val replacedOtherPlayers = otherPlayers.map { otherPlayer =>
           if (updatedOtherPawns.exists(_.color == otherPlayer.color)) {
             otherPlayer.copy(
@@ -58,7 +57,6 @@ val playGame: (GameState, Int, Int) => GameState =
 
         println(s"DEBUG: Updated Player pawns: ${movedPlayer.pawns.map(_.PawnId).mkString(", ")}")
 
-        // Update other players' pawns based on color matching
         val replacedOtherPlayers = otherPlayers.map { otherPlayer =>
           if (updatedOtherPawns.exists(_.color == otherPlayer.color)) {
             otherPlayer.copy(
@@ -77,20 +75,15 @@ val playGame: (GameState, Int, Int) => GameState =
         (player, otherPlayers)
     }
 
-    // Reconstruct updated player list by replacing the players instead of adding them
     val updatedPlayers = gameState.players.map { p =>
       if (p.color == updatedCurrentPlayer.color) updatedCurrentPlayer
       else updatedOtherPlayers.find(_.color == p.color).getOrElse(p)
     }
 
-    // Increment current player index
     val nextPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length
 
-    // Return updated game state
     GameState(updatedPlayers, nextPlayerIndex)
   }
-
-
 
   val dice: () => Int = () => scala.util.Random.nextInt(6) + 1
   def createInitialPlayers(): List[Player] = {
@@ -103,5 +96,4 @@ val playGame: (GameState, Int, Int) => GameState =
       )
     }
   }
-
 }

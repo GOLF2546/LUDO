@@ -11,8 +11,6 @@ object Player {
 object PlayerFunctions {
   import PawnFunctions._
 
-  val showPawns: Player => String = player => player.pawns.mkString("\n")
-
   val movePawn: (Player, Int, Int, List[Pawn]) => (Player, List[Pawn]) =
     (player, pawnId, steps, otherPawns) => {
 
@@ -38,19 +36,4 @@ object PlayerFunctions {
 
       (player.copy(pawns = updatedPawns), updatedOtherPawns)
     }
-
-  val findStartingPawnWithLeastId: Player => Option[Int] = player => {
-    player.pawns
-      .filter(PawnFunctions.isPawnAtStart)
-      .map(_.PawnId)
-      .sorted
-      .headOption
-  }
-
-  val getPawnsThatCanMove: Player => List[Pawn] = player =>
-    player.pawns.filter(PawnFunctions.isPawnCanMove)
-
-  val getPawnsAtStart: Player => List[Pawn] = player =>
-    player.pawns.filter(PawnFunctions.isPawnAtStart)
-
 }
