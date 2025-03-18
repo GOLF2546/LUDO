@@ -1,11 +1,16 @@
-html, body {
+
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
   overflow: hidden;
 }
 
-body.home-page, body.how-to-page, body.game-page {
+
+body.home-page,
+body.how-to-page,
+body.game-page {
   background-color: black;
   height: 100vh;
   width: 100vw;
@@ -39,33 +44,27 @@ body.home-page, body.how-to-page, body.game-page {
 }
 
 .button-container {
+  height: 650px;
   position: absolute;
-  bottom: 30%;
+  bottom: 15%;
   right: 10%;
   display: flex;
   flex-direction: column;
-  gap: 100px;
+  gap: 30px;
   align-items: center;
 }
 
-.start-btn {
+.new-game-btn, .continue-btn, .how-to-btn {
   cursor: pointer;
   max-width: 270px;
-  width: 100%;
-  height: auto;
-}
+  height: 200px;
 
-.how-to-btn {
-  cursor: pointer;
-  max-width: 400px;
-  width: 100%;
-  height: auto;
 }
 
 .button-container2 {
   position: absolute;
   right: 10%;
-  bottom: 10px;  /* Using the more specific value */
+  bottom: 10px; /* Using the more specific value */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,7 +88,8 @@ body.home-page, body.how-to-page, body.game-page {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;  /* Add this */
-  justify-content: center;  /* Add this */
-  align-items: center;  /* Add this */
+  display: flex; /* Add this */
+  justify-content: center; /* Add this */
+  align-items: center; /* Add this */
 }
+

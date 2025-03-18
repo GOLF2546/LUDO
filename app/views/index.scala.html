@@ -2,22 +2,17 @@
 <div class="container">
     <div class="background-image">
         <img src="@routes.Assets.versioned("images/page/home.png")" alt="Ludo Logo" class="logo">
-    </div>
-    <div class="button-container">
-        <img src="@routes.Assets.versioned("images/components/button/start.png")" alt="Start Button" class="start-btn"
-            onclick="startGame()">
-        <img src="@routes.Assets.versioned("images/components/button/howTo.png")" alt="How To Button" class="how-to-btn"
-            onclick="howTo()">
+
+        <div class="button-container">
+            <img src="@routes.Assets.versioned("images/components/button/continue.png")" alt="continue Button"
+                class="continue-btn">
+            <img src="@routes.Assets.versioned("images/components/button/new_game.png")" alt="restart Button"
+                class="new-game-btn">
+            <img src="@routes.Assets.versioned("images/components/button/howTo.png")" alt="How To Button"
+                class="how-to-btn">
+        </div>
     </div>
 </div>
 
-<script>
-    function startGame() {
-        window.location.href = '@routes.HomeController.start()';
-    }
-
-    function howTo() {
-        window.location.href = "@routes.HomeController.howtoplay()";
-    }
-</script>
+<script src="@routes.Assets.versioned("javascripts/ludo_script/home.js")" type="module"></script>
 }

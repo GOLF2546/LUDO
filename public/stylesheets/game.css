@@ -4,7 +4,7 @@
     width: 90vh;
     height: 90vh;
     background-color: #8b008b;
-    border: 2px solid white;
+    border: 2px solid #F5F5DC;
     padding: 20px;
 }
 
@@ -54,44 +54,45 @@
 }
 
 .home-base-green {
-    background-color: #00ff00;
+    background-color: #66BB6A;
 }
 
 .home-base-yellow {
-    background-color: #ffff00;
+    background-color: #FFC107;
 }
 
 .home-base-red {
-    background-color: red;
+    background-color: #D66C6C;
 }
 
 .home-base-blue {
-    background-color: #0000ff;
+    background-color: #6D9DC5;
 }
 
-/* Home squares (white areas inside colored bases) */
+/* Home squares (#F5F5DC areas inside colored bases) */
 .home-square {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    background-color: white;
+    background-color: #F5F5DC;
+    position: relative;
     width: 80%;
     height: 80%;
     margin: 10%;
 }
 
-.pawn-home {
+.pawn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
+    margin: auto;
+
 }
 
 /* Path squares */
 .path-vertical {
     display: grid;
-    background-color: white;
+    background-color: #F5F5DC;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: repeat(6, 1fr);
     gap: 1px;
@@ -99,7 +100,7 @@
 
 .path-horizontal {
     display: grid;
-    background-color: white;
+    background-color: #F5F5DC;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: repeat(6, 1fr);
     gap: 1px;
@@ -113,7 +114,7 @@
 
 .center-star {
     position: relative;
-    width: 100%; 
+    width: 100%;
     height: 100%;
     display: grid;
 }
@@ -125,37 +126,38 @@
 }
 
 .top-left {
-    background: #ffff00;
+    background: #FFC107;
     clip-path: polygon(50% 50%, 0% 0%, 100% 0%);
 }
 
 .top-right {
-    background: blue;
+    background: #6D9DC5;
     clip-path: polygon(50% 50%, 100% 0%, 100% 100%);
 }
 
 .bottom-left {
-    background: #00ff00;
+    background: #66BB6A;
     clip-path: polygon(50% 50%, 0% 100%, 0% 0%);
 }
 
 .bottom-right {
-    background: red;
+    background: #D66C6C;
     clip-path: polygon(50% 50%, 100% 100%, 0% 100%);
 }
 
 .path-green {
-    background-color: #00ff00;
+    background-color: #66BB6A;
 }
 
 .path-yellow {
-    background-color: #ffff00;
+    background-color: #FFC107;
 }
 
 .path-red {
-    background-color: red;
+    background-color: #D66C6C;
 }
 
 .path-blue {
-    background-color: #0000ff;
+    background-color: #6D9DC5;
 }
+
