@@ -85,11 +85,9 @@ async function selectPawn(color, pawnId) {
   }
 }
 
-
 function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
   const cell = document.getElementById(cellId);
   if (cell) {
-    
     const pawn = document.createElement("div");
     pawn.id = `player-${playerId}-pawn-${pawnId}`;
     pawn.className = `${color}-pawn`;
@@ -157,45 +155,12 @@ function clearBoardPawn() {
       pawns.forEach((pawn) => pawn.remove());
     }
   });
-  
+
   const homeSquares = document.querySelectorAll(".home-square");
   homeSquares.forEach((square) => {
     const pawns = square.querySelectorAll(".pawn");
     pawns.forEach((pawn) => pawn.remove());
   });
-}
-function CheckWinner(color, numEndPawn) {
-  if (numEndPawn == 4) {
-    const imagePath = `/assets/images/components/winner/${color.charAt(0)}.png`;
-    const winnerImage = document.createElement("img");
-    winnerImage.src = imagePath;
-    winnerImage.alt = `${color} wins!`;
-    winnerImage.classList.add("winner-image");
-
-    const winnerContainer = document.getElementById("winner-container");
-    const gameBoard = document.getElementById("game-board");
-    if (winnerContainer && gameBoard) {
-      winnerContainer.appendChild(winnerImage);
-
-      // Add NG.png image for restarting the game
-      const restartImage = document.createElement("img");
-      restartImage.src = `/assets/images/components/winner/NG.png`;
-      restartImage.alt = "Restart Game";
-      restartImage.classList.add("restart-image");
-      restartImage.style.cursor = "pointer";
-      restartImage.style.position = "absolute";
-      restartImage.style.bottom = "10px";
-      restartImage.style.right = "10px";
-      restartImage.addEventListener("click", restart);
-
-      winnerContainer.style.position = "relative";
-      winnerContainer.appendChild(restartImage);
-      winnerContainer.style.display = "block";
-      gameBoard.style.display = "none";
-    } else {
-      console.error("Winner container or game board not found!");
-    }
-  }
 }
 
 function updatePlayerPositions(playersData) {
@@ -214,7 +179,7 @@ function updatePlayerPositions(playersData) {
     const playerId = player.id;
     const color = colorMap[playerId];
 
-    player.pawns.forEach((pawn, pawnIndex) => {
+    player.pawns.forEach((pawn) => {
       console.log("🔍 Checking pawn data:", pawn);
 
       if (!pawn.PawnId) {
@@ -225,40 +190,49 @@ function updatePlayerPositions(playersData) {
       const pawnId = pawn.PawnId;
       const cellId = pawn.initialX ? pawn.initialX.toString() : null;
 
-      if (pawn.state === "Start") {
-        const homeSquare = document.querySelector(
-          `.home-base-${color.toLowerCase()} .home-square`
-        );
-        if (homeSquare) {
-          const pawnElement = createPawnElement(
+      switch (pawn.state) {
+        case "Start": {
+          const homeSquare = document.querySelector(
+            `.home-base-${color.toLowerCase()} .home-square`
+          );
+          if (homeSquare) {
+            const pawnElement = createPawnElement(color, pawnId, pawn.state);
+            homeSquare.appendChild(pawnElement);
+          }
+          break;
+        }
+        case "Normal": {
+          if (cellId) {
+            placePawnOnBoard(cellId, playerId, color, pawnId, pawn.state);
+          }
+          break;
+        }
+        case "Finish": {
+          placePawnOnBoard(
+            `${color.charAt(0).toUpperCase()}${pawn.initialX}`,
+            playerId,
             color,
             pawnId,
             pawn.state
           );
-          homeSquare.appendChild(pawnElement);
+          break;
         }
-      } else if (pawn.state === "Normal" && cellId) {
-        placePawnOnBoard(cellId, playerId, color, pawnId, pawn.state);
-      } else if (pawn.state === "Finish") {
-        placePawnOnBoard(
-          `${color.charAt(0).toUpperCase()}${pawn.initialX}`,
-          playerId,
-          color,
-          pawnId,
-          pawn.state
-        );
-      } else if (pawn.state === "End") {
-        placePawnOnBoard(
-          `${color.charAt(0).toUpperCase()}6`,
-          playerId,
-          color,
-          pawnId,
-          pawn.state
-        );
+        case "End": {
+          placePawnOnBoard(
+            `${color.charAt(0).toUpperCase()}6`,
+            playerId,
+            color,
+            pawnId,
+            pawn.state
+          );
+          break;
+        }
+        default:
+          break;
       }
     });
 
-    const endPawn = player.pawns.filter(pawn => pawn.state === "End").length;
+    const endPawn = player.pawns.filter((pawn) => pawn.state === "End").length;
     if (endPawn === 4) CheckWinner(color, endPawn);
   });
 }
@@ -304,8 +278,41 @@ function createPawnElement(color, pawnId, state) {
   pawnElement.dataset.state = state;
   pawnElement.style.cursor = "pointer";
   pawnElement.onclick = () => selectPawn(color, pawnId);
-  
+
   return pawnElement;
+}
+function CheckWinner(color, numEndPawn) {
+  if (numEndPawn == 4) {
+    const imagePath = `/assets/images/components/winner/${color.charAt(0)}.png`;
+    const winnerImage = document.createElement("img");
+    winnerImage.src = imagePath;
+    winnerImage.alt = `${color} wins!`;
+    winnerImage.classList.add("winner-image");
+
+    const winnerContainer = document.getElementById("winner-container");
+    const gameBoard = document.getElementById("game-board");
+    if (winnerContainer && gameBoard) {
+      winnerContainer.appendChild(winnerImage);
+
+      // Add NG.png image for restarting the game
+      const restartImage = document.createElement("img");
+      restartImage.src = `/assets/images/components/winner/NG.png`;
+      restartImage.alt = "Restart Game";
+      restartImage.classList.add("restart-image");
+      restartImage.style.cursor = "pointer";
+      restartImage.style.position = "absolute";
+      restartImage.style.bottom = "10px";
+      restartImage.style.right = "10px";
+      restartImage.addEventListener("click", restart);
+
+      winnerContainer.style.position = "relative";
+      winnerContainer.appendChild(restartImage);
+      winnerContainer.style.display = "block";
+      gameBoard.style.display = "none";
+    } else {
+      console.error("Winner container or game board not found!");
+    }
+  }
 }
 
 export { rollDice, initializeGame };

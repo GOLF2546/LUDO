@@ -3,7 +3,7 @@
     position: relative;
     width: 90vh;
     height: 90vh;
-    background-color: #8b008b;
+    background-color: #c94cc9;
     border: 2px solid #F5F5DC;
     padding: 20px;
 }
@@ -58,7 +58,7 @@
 }
 
 .home-base-yellow {
-    background-color: #FFC107;
+    background-color: #e3d028;
 }
 
 .home-base-red {
@@ -126,7 +126,7 @@
 }
 
 .top-left {
-    background: #FFC107;
+    background: #e3d028;
     clip-path: polygon(50% 50%, 0% 0%, 100% 0%);
 }
 
@@ -150,7 +150,7 @@
 }
 
 .path-yellow {
-    background-color: #FFC107;
+    background-color: #e3d028;
 }
 
 .path-red {
