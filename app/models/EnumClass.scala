@@ -1,5 +1,4 @@
 package models
-
 import play.api.libs.json._
 
 // Generic JSON format for enums

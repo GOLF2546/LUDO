@@ -32,18 +32,12 @@ object PawnFunctions {
   val move: (Pawn, Int, List[Pawn]) => (Int, Int, PawnState, List[Pawn]) =
     (pawn, steps, otherPawns) => {
       val newY = pawn.initialY + steps
-      println(
-        s"new Y is ${newY}, initialY is ${pawn.initialY}, and step is ${steps}"
-      )
-
       val (newX, newState) = (pawn.state, newY) match {
         case (PawnState.Start, y) if y == 6 =>
-          println("Pawn is in Start state, moving to Normal state")
           (setPosition(pawn.color), PawnState.Normal)
 
         case (PawnState.Normal, y) if y > 56 =>
           val nextX = newY - 56
-          println("Pawn is in Normal state, moving to the Finish line.")
           (nextX, PawnState.Finish)
 
         case (PawnState.Finish, y) =>
@@ -54,18 +48,13 @@ object PawnFunctions {
             case Color.Green  => "G"
             case Color.Yellow => "Y"
           }
-
           // The position in the final stretch (starts at 1, ends at 6)
           val finalPosition =
             y - 10 // Adjust this calculation based on your game mechanics
 
           if (finalPosition >= 6) {
-            println("Pawn has reached the End state.")
             (0, PawnState.End)
           } else {
-            println(
-              s"Pawn is moving to ${colorPrefix}${finalPosition} in the final stretch."
-            )
             (finalPosition, PawnState.Finish)
           }
 
@@ -74,7 +63,6 @@ object PawnFunctions {
               case x if x > 52 => x - 52
               case x => x
             }
-          println("No specific match, moving pawn normally.")
           (nextX, pawn.state)
       }
 
@@ -90,16 +78,11 @@ object PawnFunctions {
         if (
           pawn.state == PawnState.Normal && getPosition(pawn) == (newX, state)
         ) {
-          println(
-            s"(0, 0) Pawn ${pawn.PawnId} ${pawn.color} is being reset to the Start state."
-          )
           pawn.copy(initialX = 0, initialY = 0, state = PawnState.Start) // Create a new Pawn with the updated state
         } else {
           pawn // Keep the original Pawn unchanged
         }
       }
-
-      println(s"Updated pawns: $updatedPawns")
       updatedPawns
     }
 

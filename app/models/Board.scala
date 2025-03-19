@@ -1,5 +1,4 @@
 package models
-
 import scala.io.StdIn
 import play.api.libs.json._
 import java.io.{File, PrintWriter}
@@ -15,26 +14,17 @@ object GameState {
 object Board {
   import PlayerFunctions._
   import PawnFunctions._
-  println("DEBUG: Board object initialized")
 
 val playGame: (GameState, Int, Int) => GameState =
   (gameState, pawnId, diceValue) => {
     val player = gameState.players(gameState.currentPlayerIndex)
     val otherPlayers = gameState.players.filter(_.id != player.id)
     val pawnOption = player.pawns.find(_.PawnId == pawnId)
-
-    println(s"DEBUG: Pawn found: ${pawnOption.map(_.PawnId).getOrElse("None")}")
-
     val (updatedCurrentPlayer, updatedOtherPlayers) = pawnOption match {
       case Some(pawn) if PawnFunctions.isPawnCanMove(pawn) || diceValue == 6 =>
-        println(s"DEBUG: Pawn can move: ${pawn.PawnId}")
-
         val otherPlayerPawns = otherPlayers.flatMap(_.pawns)
         val (movedPlayer, updatedOtherPawns) =
           PlayerFunctions.movePawn(player, pawnId, diceValue, otherPlayerPawns)
-
-        println(s"DEBUG: Updated Player pawns: ${movedPlayer.pawns.map(_.PawnId).mkString(", ")}")
-
         val replacedOtherPlayers = otherPlayers.map { otherPlayer =>
           if (updatedOtherPawns.exists(_.color == otherPlayer.color)) {
             otherPlayer.copy(
@@ -45,18 +35,11 @@ val playGame: (GameState, Int, Int) => GameState =
             )
           } else otherPlayer
         }
-
         (movedPlayer, replacedOtherPlayers)
-
       case Some(pawn) if PawnFunctions.isPawnAtStart(pawn) && diceValue == 6 =>
-        println(s"DEBUG: Pawn at start: ${pawn.PawnId}, dice value is 6")
-
         val otherPlayerPawns = otherPlayers.flatMap(_.pawns)
         val (movedPlayer, updatedOtherPawns) =
           PlayerFunctions.movePawn(player, pawnId, diceValue, otherPlayerPawns)
-
-        println(s"DEBUG: Updated Player pawns: ${movedPlayer.pawns.map(_.PawnId).mkString(", ")}")
-
         val replacedOtherPlayers = otherPlayers.map { otherPlayer =>
           if (updatedOtherPawns.exists(_.color == otherPlayer.color)) {
             otherPlayer.copy(
@@ -67,21 +50,15 @@ val playGame: (GameState, Int, Int) => GameState =
             )
           } else otherPlayer
         }
-
         (movedPlayer, replacedOtherPlayers)
-
       case _ =>
-        println("DEBUG: Invalid move or no valid pawn to move.")
         (player, otherPlayers)
     }
-
     val updatedPlayers = gameState.players.map { p =>
       if (p.color == updatedCurrentPlayer.color) updatedCurrentPlayer
       else updatedOtherPlayers.find(_.color == p.color).getOrElse(p)
     }
-
     val nextPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length
-
     GameState(updatedPlayers, nextPlayerIndex)
   }
   
