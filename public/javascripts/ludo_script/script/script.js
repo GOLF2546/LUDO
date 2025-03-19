@@ -91,7 +91,7 @@ function placePawnOnBoard(cellId, playerId, color, pawnId, state, numOfPawn) {
   const cell = document.getElementById(cellId);
   if (cell) {
     const pawn = document.createElement("div");
-    pawn.id = `player-${playerId}-pawn-${pawnId}`;
+    pawn.id = `player-${playerId}-pawn-${pawnId[0]}`;
     pawn.className = `${color}-pawn`;
 
     const imagePath = `/assets/images/components/pawn/${
@@ -103,7 +103,7 @@ function placePawnOnBoard(cellId, playerId, color, pawnId, state, numOfPawn) {
     pawn.style.backgroundPosition = "center";
 
     pawn.onclick = () => selectPawn(color, pawnId[0]);
-
+    console.log(state);
     if (state === "End") {
       pawn.style.position = "absolute";
       pawn.style.width = "25%";
@@ -228,14 +228,8 @@ function updatePlayerPositions(playersData) {
           break;
 
         case "End":
-          placePawnOnBoard(
-            `${color.charAt(0).toUpperCase()}6`,
-            playerId,
-            color,
-            pawnIds,
-            state,
-            len
-          );
+          const endCellId = `${color.charAt(0).toUpperCase()}6`; // Should match 'R6', 'G6', 'B6', 'Y6'
+          placePawnOnBoard(endCellId, playerId, color, pawnIds, state, len);
           break;
       }
     }
@@ -321,7 +315,7 @@ function CheckWinner(color, numEndPawn) {
       restartImage.style.position = "absolute";
       restartImage.style.bottom = "10px";
       restartImage.style.right = "10px";
-      restartImage.addEventListener("click" ,() => {
+      restartImage.addEventListener("click", () => {
         startGamePage();
         restart();
       });
@@ -330,11 +324,9 @@ function CheckWinner(color, numEndPawn) {
       winnerContainer.appendChild(restartImage);
       winnerContainer.style.display = "block";
       gameBoard.style.display = "none";
-      
     } else {
       console.error("Winner container or game board not found!");
     }
-    
   }
 }
 
