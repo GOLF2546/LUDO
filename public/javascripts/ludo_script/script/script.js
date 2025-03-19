@@ -85,20 +85,22 @@ async function selectPawn(color, pawnId) {
   }
 }
 
-function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
+function placePawnOnBoard(cellId, playerId, color, pawnId, state, numOfPawn) {
   const cell = document.getElementById(cellId);
   if (cell) {
     const pawn = document.createElement("div");
     pawn.id = `player-${playerId}-pawn-${pawnId}`;
     pawn.className = `${color}-pawn`;
 
-    const imagePath = `/assets/images/components/pawn/${color.charAt(0)}.png`;
+    const imagePath = `/assets/images/components/pawn/${
+      color.charAt(0) + numOfPawn
+    }.png`;
     pawn.style.backgroundImage = `url('${imagePath}')`;
     pawn.style.backgroundSize = "contain";
     pawn.style.backgroundRepeat = "no-repeat";
     pawn.style.backgroundPosition = "center";
 
-    pawn.onclick = () => selectPawn(color, pawnId);
+    pawn.onclick = () => selectPawn(color, pawnId[0]);
 
     if (state === "End") {
       pawn.style.position = "absolute";
@@ -162,78 +164,94 @@ function clearBoardPawn() {
     pawns.forEach((pawn) => pawn.remove());
   });
 }
-
 function updatePlayerPositions(playersData) {
   clearBoardPawn();
 
-  const colorMap = {
-    1: "Green",
-    2: "Yellow",
-    3: "Blue",
-    4: "Red",
-  };
-
+  const colorMap = { 1: "Green", 2: "Yellow", 3: "Blue", 4: "Red" };
   const playersArray = Array.isArray(playersData) ? playersData : [playersData];
 
+  const cellMap = {}; // Store pawn groups by cell position
+
+  // Group pawns by cell and state
   playersArray.forEach((player) => {
     const playerId = player.id;
     const color = colorMap[playerId];
 
-    player.pawns.forEach((pawn) => {
-      console.log("🔍 Checking pawn data:", pawn);
+    console.log(`\n🎨 Processing Player: ${color} (ID: ${playerId})`);
 
+    player.pawns.forEach((pawn) => {
       if (!pawn.PawnId) {
         console.error("❌ Error: Pawn ID is missing in player data!", pawn);
         return;
       }
 
-      const pawnId = pawn.PawnId;
-      const cellId = pawn.initialX ? pawn.initialX.toString() : null;
+      if (pawn.state === "Start") {
+        const homeSquare = document.querySelector(
+          `.home-base-${color.toLowerCase()} .home-square`
+        );
+        if (homeSquare) {
+          const pawnElement = createPawnElement(color, pawn.PawnId, pawn.state);
+          homeSquare.appendChild(pawnElement);
+        }
+      } else {
+        const cellId = pawn.initialX ? pawn.initialX.toString() : null;
+        const state = pawn.state;
+        const key = `${cellId}-${state}`;
 
-      switch (pawn.state) {
-        case "Start": {
-          const homeSquare = document.querySelector(
-            `.home-base-${color.toLowerCase()} .home-square`
-          );
-          if (homeSquare) {
-            const pawnElement = createPawnElement(color, pawnId, pawn.state);
-            homeSquare.appendChild(pawnElement);
-          }
-          break;
+        if (!cellMap[key]) {
+          cellMap[key] = { pawnIds: [], playerId, color, cellId, state };
         }
-        case "Normal": {
-          if (cellId) {
-            placePawnOnBoard(cellId, playerId, color, pawnId, pawn.state);
-          }
+        cellMap[key].pawnIds.push(pawn.PawnId);
+      }
+    });
+  });
+
+  console.log("🛠️ Debug: Cell Groups", cellMap);
+
+  // Call placePawnOnBoard only once per cellId
+  Object.values(cellMap).forEach(
+    ({ pawnIds, playerId, color, cellId, state }) => {
+      if (!cellId) return;
+
+      const len = pawnIds.length.toString(); // Number of pawns in this cell
+
+      switch (state) {
+        case "Normal":
+          placePawnOnBoard(cellId, playerId, color, pawnIds, state, len);
           break;
-        }
-        case "Finish": {
+
+        case "Finish":
           placePawnOnBoard(
-            `${color.charAt(0).toUpperCase()}${pawn.initialX}`,
+            `${color.charAt(0).toUpperCase()}${cellId}`,
             playerId,
             color,
-            pawnId,
-            pawn.state
+            pawnIds,
+            state,
+            len
           );
           break;
-        }
-        case "End": {
+
+        case "End":
           placePawnOnBoard(
             `${color.charAt(0).toUpperCase()}6`,
             playerId,
             color,
-            pawnId,
-            pawn.state
+            pawnIds,
+            state,
+            len
           );
           break;
-        }
-        default:
-          break;
       }
-    });
+    }
+  );
 
-    const endPawn = player.pawns.filter((pawn) => pawn.state === "End").length;
-    if (endPawn === 4) CheckWinner(color, endPawn);
+  // Check for winners
+  playersArray.forEach((player) => {
+    const color = colorMap[player.id];
+    const endPawnCount = player.pawns.filter(
+      (pawn) => pawn.state === "End"
+    ).length;
+    if (endPawnCount === 4) CheckWinner(color, endPawnCount);
   });
 }
 
