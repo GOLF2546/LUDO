@@ -89,6 +89,7 @@ async function selectPawn(color, pawnId) {
 
 function placePawnOnBoard(cellId, playerId, color, pawnId, state, numOfPawn) {
   const cell = document.getElementById(cellId);
+  console.log(cellId)
   if (cell) {
     const pawn = document.createElement("div");
     pawn.id = `player-${playerId}-pawn-${pawnId[0]}`;
@@ -192,9 +193,9 @@ function updatePlayerPositions(playersData) {
           homeSquare.appendChild(pawnElement);
         }
       } else {
-        const cellId = pawn.initialX ? pawn.initialX.toString() : null;
+        const cellId = pawn.initialX ? pawn.initialX.toString() : "end";
         const state = pawn.state;
-        const key = `${cellId}-${state}`;
+        const key = `${cellId}-${state}-${color}`;
 
         if (!cellMap[key]) {
           cellMap[key] = { pawnIds: [], playerId, color, cellId, state };
@@ -203,7 +204,7 @@ function updatePlayerPositions(playersData) {
       }
     });
   });
-
+  console.log(cellMap)
   // Call placePawnOnBoard only once per cellId
   Object.values(cellMap).forEach(
     ({ pawnIds, playerId, color, cellId, state }) => {
