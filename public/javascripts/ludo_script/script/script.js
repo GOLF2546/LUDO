@@ -1,4 +1,6 @@
 import { restart } from "./hook/restartgame.js";
+import { startGame } from "./hook/startgame.js";
+import { startGamePage } from "./navigation.js";
 let diceValue = 0;
 let playerTurn = 0;
 
@@ -176,12 +178,8 @@ function updatePlayerPositions(playersData) {
   playersArray.forEach((player) => {
     const playerId = player.id;
     const color = colorMap[playerId];
-
-    console.log(`\n🎨 Processing Player: ${color} (ID: ${playerId})`);
-
     player.pawns.forEach((pawn) => {
       if (!pawn.PawnId) {
-        console.error("❌ Error: Pawn ID is missing in player data!", pawn);
         return;
       }
 
@@ -205,8 +203,6 @@ function updatePlayerPositions(playersData) {
       }
     });
   });
-
-  console.log("🛠️ Debug: Cell Groups", cellMap);
 
   // Call placePawnOnBoard only once per cellId
   Object.values(cellMap).forEach(
@@ -301,6 +297,10 @@ function createPawnElement(color, pawnId, state) {
 }
 function CheckWinner(color, numEndPawn) {
   if (numEndPawn == 4) {
+    const existingWinnerImage = document.querySelector(".winner-image");
+    if (existingWinnerImage) {
+      return;
+    }
     const imagePath = `/assets/images/components/winner/${color.charAt(0)}.png`;
     const winnerImage = document.createElement("img");
     winnerImage.src = imagePath;
@@ -321,15 +321,20 @@ function CheckWinner(color, numEndPawn) {
       restartImage.style.position = "absolute";
       restartImage.style.bottom = "10px";
       restartImage.style.right = "10px";
-      restartImage.addEventListener("click", restart);
+      restartImage.addEventListener("click" ,() => {
+        startGamePage();
+        restart();
+      });
 
       winnerContainer.style.position = "relative";
       winnerContainer.appendChild(restartImage);
       winnerContainer.style.display = "block";
       gameBoard.style.display = "none";
+      
     } else {
       console.error("Winner container or game board not found!");
     }
+    
   }
 }
 

@@ -50,7 +50,7 @@ object PawnFunctions {
           }
           // The position in the final stretch (starts at 1, ends at 6)
           val finalPosition =
-            y - 10 // Adjust this calculation based on your game mechanics
+            y - 56 // Adjust this calculation based on your game mechanics
 
           if (finalPosition >= 6) {
             (0, PawnState.End)
