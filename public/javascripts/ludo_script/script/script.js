@@ -89,7 +89,7 @@ async function selectPawn(color, pawnId) {
 
 function placePawnOnBoard(cellId, playerId, color, pawnId, state, numOfPawn) {
   const cell = document.getElementById(cellId);
-  console.log(cellId)
+  console.log(cellId);
   if (cell) {
     const pawn = document.createElement("div");
     pawn.id = `player-${playerId}-pawn-${pawnId[0]}`;
@@ -204,7 +204,7 @@ function updatePlayerPositions(playersData) {
       }
     });
   });
-  console.log(cellMap)
+  console.log(cellMap);
   // Call placePawnOnBoard only once per cellId
   Object.values(cellMap).forEach(
     ({ pawnIds, playerId, color, cellId, state }) => {
@@ -256,20 +256,20 @@ function createDiceButton(playerTurn, diceValue) {
 
   switch (playerTurn) {
     case 0:
-      diceButton.style.top = "10px";
-      diceButton.style.left = "10px";
+      diceButton.style.top = "35px";
+      diceButton.style.left = "200px";
       break;
     case 1:
-      diceButton.style.top = "10px";
-      diceButton.style.right = "10px";
+      diceButton.style.top = "35px";
+      diceButton.style.right = "200px";
       break;
     case 2:
       diceButton.style.bottom = "10px";
-      diceButton.style.right = "10px";
+      diceButton.style.right = "200px";
       break;
     case 3:
       diceButton.style.bottom = "10px";
-      diceButton.style.left = "10px";
+      diceButton.style.left = "200px";
       break;
   }
 
