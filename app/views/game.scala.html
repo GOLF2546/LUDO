@@ -1,53 +1,50 @@
 @main("Ludo Game", "game-page") {
 
-<div class="custom-container flex">
-  <div>
-    <div id="dice-result" style="font-size: 20px; margin: 20px 0" class="flex">
-    </div>
-    <div><button class="roll-btn"></button></div>
-  </div>
- 
+  <div class="custom-container flex">
+    <div id="winner-container" style="display: none;"></div>
+    <div id="game-board">
+      <div id="dice-result" style="font-size: 20px; margin: 20px 0" class="flex"></div>
+      <div><button class="roll-btn"></button></div>
+    
+      <div class="ludo-board">
+        <div class="game-grid">
+          <div class="home-base home-base-green">
+            <div class="home-square"></div>
+          </div>
   
-  <div class="ludo-board">
-
-    <div class="game-grid">
-      <div class="home-base home-base-green">
-        <div class="home-square"></div>
+          <div class="path-vertical">@components.path(18, "Yellow")</div>
+  
+          <div class="home-base home-base-yellow">
+            <div class="home-square"></div>
+          </div>
+  
+          <div class="path-horizontal">@components.path(18, "Green")</div>
+  
+          <div class="center-star">
+            <div id="Y6" class="top-left"></div>
+            <div id="B6" class="top-right"></div>
+            <div id="G6" class="bottom-left"></div>
+            <div id="R6" class="bottom-right"></div>
+          </div>
+  
+          <div class="path-horizontal">@components.path(18, "Blue")</div>
+  
+          <div class="home-base home-base-red">
+            <div class="home-square"></div>
+          </div>
+  
+          <div class="path-vertical">@components.path(18, "Red")</div>
+  
+          <div class="home-base home-base-blue">
+            <div class="home-square"></div>
+          </div>
+        </div>
       </div>
-
-      <div class="path-vertical">@components.path(18, "Yellow")</div>
-
-      <div class="home-base home-base-yellow">
-        <div class="home-square"></div>
-      </div>
-
-      <div class="path-horizontal">@components.path(18, "Green")</div>
-
-
-      <div class="center-star">
-        <div id="Y6" class="top-left"></div>
-        <div id="B6" class="top-right"></div>
-        <div id="G6" class="bottom-left"></div>
-        <div id="R6" class="bottom-right"></div>
-      </div>
-
-      <div class="path-horizontal">@components.path(18, "Blue")</div>
-
-      <div class="home-base home-base-red">
-        <div class="home-square"></div>
-      </div>
-
-      <div class="path-vertical">@components.path(18, "Red")</div>
-
-      <div class="home-base home-base-blue">
-        <div class="home-square"></div>
+      <div class="button-container3">
+        <img src="@routes.Assets.versioned("images/components/button/homegamepage.png")" alt="home page" class="home-btn">
       </div>
     </div>
   </div>
-  <div class="button-container3">
-    <img src="@routes.Assets.versioned("images/components/button/homegamepage.png")" alt="home page" class="home-btn">
-  </div>
-</div>
-<script src="@routes.Assets.versioned("javascripts/ludo_script/gamepage.js")" type="module"></script>
-
-}
+  <script src="@routes.Assets.versioned("javascripts/ludo_script/gamepage.js")" type="module"></script>
+  
+  }

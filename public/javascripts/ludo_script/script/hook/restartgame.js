@@ -4,6 +4,7 @@ async function restart() {
       method: "GET",
       headers: { Accept: "application/json" },
     });
+    location.reload();
   } catch (error) {
     console.error("Error initializing game:", error);
   }

@@ -1,3 +1,4 @@
+import { restart } from "./hook/restartgame.js";
 let diceValue = 0;
 let playerTurn = 0;
 
@@ -84,6 +85,7 @@ async function selectPawn(color, pawnId) {
   }
 }
 
+
 function placePawnOnBoard(cellId, playerId, color, pawnId, state) {
   const cell = document.getElementById(cellId);
   if (cell) {
@@ -162,6 +164,39 @@ function clearBoardPawn() {
     pawns.forEach((pawn) => pawn.remove());
   });
 }
+function CheckWinner(color, numEndPawn) {
+  if (numEndPawn == 4) {
+    const imagePath = `/assets/images/components/winner/${color.charAt(0)}.png`;
+    const winnerImage = document.createElement("img");
+    winnerImage.src = imagePath;
+    winnerImage.alt = `${color} wins!`;
+    winnerImage.classList.add("winner-image");
+
+    const winnerContainer = document.getElementById("winner-container");
+    const gameBoard = document.getElementById("game-board");
+    if (winnerContainer && gameBoard) {
+      winnerContainer.appendChild(winnerImage);
+
+      // Add NG.png image for restarting the game
+      const restartImage = document.createElement("img");
+      restartImage.src = `/assets/images/components/winner/NG.png`;
+      restartImage.alt = "Restart Game";
+      restartImage.classList.add("restart-image");
+      restartImage.style.cursor = "pointer";
+      restartImage.style.position = "absolute";
+      restartImage.style.bottom = "10px";
+      restartImage.style.right = "10px";
+      restartImage.addEventListener("click", restart);
+
+      winnerContainer.style.position = "relative";
+      winnerContainer.appendChild(restartImage);
+      winnerContainer.style.display = "block";
+      gameBoard.style.display = "none";
+    } else {
+      console.error("Winner container or game board not found!");
+    }
+  }
+}
 
 function updatePlayerPositions(playersData) {
   clearBoardPawn();
@@ -222,6 +257,9 @@ function updatePlayerPositions(playersData) {
         );
       }
     });
+
+    const endPawn = player.pawns.filter(pawn => pawn.state === "End").length;
+    if (endPawn === 4) CheckWinner(color, endPawn);
   });
 }
 
