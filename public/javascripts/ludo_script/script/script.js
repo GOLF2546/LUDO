@@ -1,10 +1,13 @@
 import { restart } from "./hook/restartgame.js";
-import { startGame } from "./hook/startgame.js";
 import { startGamePage } from "./navigation.js";
 let diceValue = 0;
 let playerTurn = 0;
 
 async function rollDice() {
+  if(diceValue !== 0){
+    alert(`You already dice and dice value is : ${diceValue}`);
+    return
+  }
   try {
     const response = await fetch("/rollDice", {
       method: "GET",
@@ -81,6 +84,7 @@ async function selectPawn(color, pawnId) {
 
     const updatedPlayer = await response.json();
     updatePlayerPositions(updatedPlayer);
+    diceValue = 0;
     await initializeGame();
   } catch (error) {
     alert("Failed to move the pawn. Please try again.");
@@ -204,8 +208,6 @@ function updatePlayerPositions(playersData) {
       }
     });
   });
-  console.log(cellMap);
-  // Call placePawnOnBoard only once per cellId
   Object.values(cellMap).forEach(
     ({ pawnIds, playerId, color, cellId, state }) => {
       if (!cellId) return;
@@ -264,11 +266,11 @@ function createDiceButton(playerTurn, diceValue) {
       diceButton.style.right = "200px";
       break;
     case 2:
-      diceButton.style.bottom = "10px";
+      diceButton.style.bottom = "35px";
       diceButton.style.right = "200px";
       break;
     case 3:
-      diceButton.style.bottom = "10px";
+      diceButton.style.bottom = "35px";
       diceButton.style.left = "200px";
       break;
   }
