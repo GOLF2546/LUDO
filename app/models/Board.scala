@@ -34,61 +34,65 @@ object Board {
       val player = gameState.players(gameState.currentPlayerIndex)
       val otherPlayers = gameState.players.filter(_.id != player.id)
       val pawnOption = player.pawns.find(_.PawnId == pawnId)
-      val (updatedCurrentPlayer, updatedOtherPlayers) = pawnOption match {
-        case Some(pawn)
-            if PawnFunctions.isPawnCanMove(pawn) || diceValue == 6 =>
-          val otherPlayerPawns = otherPlayers.flatMap(_.pawns)
-          val (movedPlayer, updatedOtherPawns) =
-            PlayerFunctions.movePawn(
-              player,
-              pawnId,
-              diceValue,
-              otherPlayerPawns
-            )
-          val replacedOtherPlayers = otherPlayers.map { otherPlayer =>
-            if (updatedOtherPawns.exists(_.color == otherPlayer.color)) {
-              otherPlayer.copy(
-                pawns = otherPlayer.pawns.map { p =>
-                  updatedOtherPawns
-                    .find(up => up.PawnId == p.PawnId && up.color == p.color)
-                    .getOrElse(p)
-                }
+      val (updatedCurrentPlayer, updatedOtherPlayers, isChangedPlayer) =
+        pawnOption match {
+          case Some(pawn)
+              if PawnFunctions.isPawnCanMove(pawn) || diceValue == 6 =>
+            val otherPlayerPawns = otherPlayers.flatMap(_.pawns)
+            val (movedPlayer, updatedOtherPawns) =
+              PlayerFunctions.movePawn(
+                player,
+                pawnId,
+                diceValue,
+                otherPlayerPawns
               )
-            } else otherPlayer
-          }
-          (movedPlayer, replacedOtherPlayers)
-        case Some(pawn)
-            if PawnFunctions.isPawnAtStart(pawn) && diceValue == 6 =>
-          val otherPlayerPawns = otherPlayers.flatMap(_.pawns)
-          val (movedPlayer, updatedOtherPawns) =
-            PlayerFunctions.movePawn(
-              player,
-              pawnId,
-              diceValue,
-              otherPlayerPawns
-            )
-          val replacedOtherPlayers = otherPlayers.map { otherPlayer =>
-            if (updatedOtherPawns.exists(_.color == otherPlayer.color)) {
-              otherPlayer.copy(
-                pawns = otherPlayer.pawns.map { p =>
-                  updatedOtherPawns
-                    .find(up => up.PawnId == p.PawnId && up.color == p.color)
-                    .getOrElse(p)
-                }
+            val replacedOtherPlayers = otherPlayers.map { otherPlayer =>
+              if (updatedOtherPawns.exists(_.color == otherPlayer.color)) {
+                otherPlayer.copy(
+                  pawns = otherPlayer.pawns.map { p =>
+                    updatedOtherPawns
+                      .find(up => up.PawnId == p.PawnId && up.color == p.color)
+                      .getOrElse(p)
+                  }
+                )
+              } else otherPlayer
+            }
+            (movedPlayer, replacedOtherPlayers,!(diceValue == 6))
+          case Some(pawn)
+              if PawnFunctions.isPawnAtStart(pawn) && diceValue == 6 =>
+            val otherPlayerPawns = otherPlayers.flatMap(_.pawns)
+            val (movedPlayer, updatedOtherPawns) =
+              PlayerFunctions.movePawn(
+                player,
+                pawnId,
+                diceValue,
+                otherPlayerPawns
               )
-            } else otherPlayer
-          }
-          (movedPlayer, replacedOtherPlayers)
-        case _ =>
-          (player, otherPlayers)
-      }
+            val replacedOtherPlayers = otherPlayers.map { otherPlayer =>
+              if (updatedOtherPawns.exists(_.color == otherPlayer.color)) {
+                otherPlayer.copy(
+                  pawns = otherPlayer.pawns.map { p =>
+                    updatedOtherPawns
+                      .find(up => up.PawnId == p.PawnId && up.color == p.color)
+                      .getOrElse(p)
+                  }
+                )
+              } else otherPlayer
+            }
+            (movedPlayer, replacedOtherPlayers, false)
+          case _ =>
+            (player, otherPlayers, true)
+        }
       val updatedPlayers = gameState.players.map { p =>
         if (p.color == updatedCurrentPlayer.color) updatedCurrentPlayer
         else updatedOtherPlayers.find(_.color == p.color).getOrElse(p)
       }
       val nextPlayerIndex =
-        (gameState.currentPlayerIndex + 1) % gameState.players.length
+        if (isChangedPlayer)
+          (gameState.currentPlayerIndex + 1) % gameState.players.length
+        else gameState.currentPlayerIndex
       GameState(updatedPlayers, nextPlayerIndex)
+
     }
   def createInitialPlayers(): List[Player] = {
     val playerColors = List(Color.Green, Color.Yellow, Color.Blue, Color.Red)
