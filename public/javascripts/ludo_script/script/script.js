@@ -2,11 +2,10 @@ import { restart } from "./hook/restartgame.js";
 import { startGamePage } from "./navigation.js";
 let diceValue = 0;
 let playerTurn = 0;
-
 async function rollDice() {
-  if(diceValue !== 0){
-    alert(`You already dice and dice value is : ${diceValue}`);
-    return
+  if (diceValue !== 0) {
+    alert(`You already rolled the dice and the value is: ${diceValue}`);
+    return;
   }
   try {
     const response = await fetch("/rollDice", {
@@ -17,12 +16,22 @@ async function rollDice() {
     });
 
     const result = await response.json();
-    diceValue = result;
-
+    diceValue = result.diceValue;
+    const playerTurn = result.playerTurn;
+    const isChanged = result.isChanged;
     const diceButton = document.querySelector(".roll-btn");
+
     if (diceButton) {
+      // Smooth transition effect for dice update
       diceButton.src = `/assets/images/components/dice/${diceValue}.png`;
       diceButton.alt = `Dice showing ${diceValue}`;
+    }
+
+    if (isChanged) {
+      const newDiceButton = createDiceButton(playerTurn, 0);
+      diceButton.replaceWith(newDiceButton);
+
+      startGamePage(); // Smoothly restart the game state
     }
   } catch (error) {
     console.error("Error rolling dice:", error);

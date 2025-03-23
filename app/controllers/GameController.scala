@@ -42,7 +42,17 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)
       InternalServerError("Failed to load players")
     }
   }
-
+  def checkPawnMove(diceRoll: Int): (Int, Boolean) = {
+    val gameState = loadGameState()
+    val canMove = Board.isCanStart(gameState, diceRoll)
+    val isChanged = if (canMove.currentPlayerIndex != gameState.currentPlayerIndex) {
+      saveGameState(canMove)
+      true
+    } else {
+      false
+    }
+    (canMove.currentPlayerIndex, isChanged)
+  }
   def handleGameClick: Action[JsValue] = Action(parse.json) { request =>
     val diceValue = (request.body \ "diceValue").as[Int]
     val color = (request.body \ "color").as[String].toLowerCase
@@ -104,4 +114,6 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)
     writer.write(jsonString)
     writer.close()
   }
+
+  
 }
