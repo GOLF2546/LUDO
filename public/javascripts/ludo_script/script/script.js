@@ -26,7 +26,7 @@ async function rollDice() {
       diceButton.src = `/assets/images/components/dice/${diceValue}.png`;
       diceButton.alt = `Dice showing ${diceValue}`;
     }
-
+    await new Promise(resolve => setTimeout(resolve, 300));
     if (isChanged) {
       const newDiceButton = createDiceButton(playerTurn, 0);
       diceButton.replaceWith(newDiceButton);
