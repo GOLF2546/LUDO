@@ -42,16 +42,13 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)
       InternalServerError("Failed to load players")
     }
   }
-  def checkPawnMove(diceRoll: Int): (Int, Boolean) = {
+  def checkPawnMove(diceRoll: Int): (GameState, Boolean) = {
     val gameState = loadGameState()
-    val canMove = Board.isCanStart(gameState, diceRoll)
-    val isChanged = if (canMove.currentPlayerIndex != gameState.currentPlayerIndex) {
-      saveGameState(canMove)
-      true
-    } else {
-      false
+    val (updatedGameState, isChanged) = Board.isCanStart(gameState, diceRoll)
+    if (isChanged) {
+      saveGameState(updatedGameState)
     }
-    (canMove.currentPlayerIndex, isChanged)
+    (updatedGameState, isChanged)
   }
   def handleGameClick: Action[JsValue] = Action(parse.json) { request =>
     val diceValue = (request.body \ "diceValue").as[Int]

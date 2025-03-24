@@ -15,22 +15,27 @@ object Board {
   import PlayerFunctions._
   import PawnFunctions._
 
-  val isCanStart: (GameState, Int) => GameState =
-    (gameState, diceValue) => {
-      val player = gameState.players(gameState.currentPlayerIndex)
-      if (diceValue != 6) {
-        if (player.pawns.forall(_.state == PawnState.Start)) {
-          val nextPlayerIndex =
-            (gameState.currentPlayerIndex + 1) % gameState.players.length
-          gameState.copy(currentPlayerIndex = nextPlayerIndex)
-        } else {
-          gameState
-        }
-      } else {
-        gameState
-      }
-    }
+val isCanStart: (GameState, Int) => (GameState, Boolean) =
+  (gameState, diceValue) => {
+    val player = gameState.players(gameState.currentPlayerIndex)
 
+    // Check if all pawns are either in Start or End
+    val allInStartOrEnd = player.pawns.forall(pawn =>
+      pawn.state == PawnState.Start || pawn.state == PawnState.End
+    )
+
+    if (diceValue != 6) {
+      if (allInStartOrEnd) {
+        val nextPlayerIndex =
+          (gameState.currentPlayerIndex + 1) % gameState.players.length
+        (gameState.copy(currentPlayerIndex = nextPlayerIndex), true)
+      } else {
+        (gameState, false)
+      }
+    } else {
+      (gameState, false)
+    }
+  }
   def movePawnAndUpdatePlayers(
       player: Player,
       pawnId: Int,

@@ -5,7 +5,7 @@ import play.api.libs.json._
 case class Pawn(
     PawnId: Int,
     initialX: Int,
-    initialY: Int,
+    step: Int,
     color: Color,
     state: PawnState
 )
@@ -31,7 +31,7 @@ object PawnFunctions {
 
   val move: (Pawn, Int, List[Pawn]) => (Int, Int, PawnState, List[Pawn]) =
     (pawn, steps, otherPawns) => {
-      val newY = pawn.initialY + steps
+      val newY = pawn.step + steps
       val (newX, newState) = (pawn.state, newY) match {
         case (PawnState.Start, y) if y == 6 =>
           (setPosition(pawn.color), PawnState.Normal)
@@ -78,7 +78,7 @@ object PawnFunctions {
         if (
           pawn.state == PawnState.Normal && getPosition(pawn) == (newX, state)
         ) {
-          pawn.copy(initialX = 0, initialY = 0, state = PawnState.Start) // Create a new Pawn with the updated state
+          pawn.copy(initialX = 0, step = 0, state = PawnState.Start) // Create a new Pawn with the updated state
         } else {
           pawn // Keep the original Pawn unchanged
         }

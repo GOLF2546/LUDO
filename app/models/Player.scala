@@ -24,7 +24,7 @@ object PlayerFunctions {
               (
                 accPawns :+ pawn.copy(
                   initialX = newX,
-                  initialY = newY,
+                  step = newY,
                   state = newState
                 ),
                 newOtherPawns
